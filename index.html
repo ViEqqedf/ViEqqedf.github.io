@@ -126,16 +126,16 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-count">3</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-count">2</span>
         <span class="site-state-item-name">分类</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
@@ -330,6 +330,97 @@
 </ul>
 <h1 id="记录"><a href="#记录" class="headerlink" title="记录"></a>记录</h1><p>Q: 使用主题后出现<code>&#123;% extends '_layout.swig' %&#125;</code>错误</p>
 <p>A: hexo在5.0之后不再自带swig，需要手动安装：npm i hexo-renderer-swig</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://vieqqedf.github.io/2021/05/11/%E5%85%B3%E4%BA%8Etex2D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="VirrorE">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ViE Here!">
+      <meta itemprop="description" content="sore ga boku no cainou?">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | ViE Here!">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/05/11/%E5%85%B3%E4%BA%8Etex2D/" class="post-title-link" itemprop="url">关于tex2D</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-05-11 17:47:46" itemprop="dateCreated datePublished" datetime="2021-05-11T17:47:46+08:00">2021-05-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-09-01 21:51:35" itemprop="dateModified" datetime="2022-09-01T21:51:35+08:00">2022-09-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>关于tex2D的一些工作方式</p>
+<p>纹理(Textures)储存数值数据，每个通道的值范围一般在0.0到1.0之间（例如<code>rgba</code>）。不同的纹理各自有不同的最大&#x2F;最小值范围，不同的精度级别，和不同的伽马曲线，<strong>但着色器从<code>tex2D()</code>得到的值形式总是一个包含四个分量的浮点向量</strong>。四个分量分别映射到纹理的四个通道，可以独立地访问，也可以以<code>.rgba</code>或<code>.xyzw</code>的形式在HLSL中访问。所以<code>.x</code>，<code>.r</code>，甚至像<code>.ag</code>或<code>.zxx</code>这样的混用都是有效的。但是<code>.xg</code>是不允许的，在指定使用的分量时不允许同时使用<code>xyzw</code>和<code>rgba</code>。<code>valueA.x = valueB.r</code>是允许的。</p>
+<p>但是不是所有的纹理都包含所有4个有效的分量，有些只有RGB，或RG，或R，或者只有A。<strong>而<code>tex2D()</code>总是返回一个<code>float4</code>的结构</strong>，没有保存的通道信息则取决于纹理格式返回一个0.0到1.0之间的值。大多数情况下通道值会返回0.0，但是有一些RGB纹理格式的A通道会返回1.0。</p>
+<p>关于不同类型之间的赋值，如果将一个<code>float4</code>类型的右值赋予一个<code>float</code>类型的左值，只有第一个分量会被用到。所以，以下赋值的效果是完全一致的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">float result = float4(1, 2, 3, 4);</span><br><span class="line">float result = float4(1, 2, 3, 4).x;</span><br><span class="line">float result = float4(1, 2, 3, 4).r;</span><br><span class="line">float result = 1;</span><br></pre></td></tr></table></figure>
+
+<p>此外，如果你习惯于以字节表示法看到颜色值，例如：从0到255的整数值。这是每个通道颜色的8位存储的文字表示，但不是它们被读取的方式。对于着色器来说，颜色值被视为一个范围为0.0到1.0，精度为1.0&#x2F;255.0的浮点数。然后是sRGB，在着色器取色之前，它可能应用额外的0.0到1.0范围的伽马曲线。</p>
 
       
     </div>
