@@ -83,7 +83,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
   </ul>
 </nav>
 
@@ -131,12 +131,14 @@
         </a>
       </div>
       <div class="site-state-item site-state-categories">
+          <a href="/categories/">
         <span class="site-state-item-count">2</span>
-        <span class="site-state-item-name">分类</span>
+        <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
+          <a href="/tags/">
         <span class="site-state-item-count">3</span>
-        <span class="site-state-item-name">标签</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -290,7 +292,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-08-31 10:32:59" itemprop="dateModified" datetime="2022-08-31T10:32:59+08:00">2022-08-31</time>
+      <time title="修改时间：2022-09-01 22:33:15" itemprop="dateModified" datetime="2022-09-01T22:33:15+08:00">2022-09-01</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -312,25 +314,16 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>这是一篇测试文章，同时记录一些Hexo相关的信息</p>
-<h1 id="图片引用方法"><a href="#图片引用方法" class="headerlink" title="图片引用方法"></a>图片引用方法</h1><img src="/2022/07/03/%E6%B5%8B%E8%AF%95%E6%96%87%E7%AB%A0/test.png" class="" title="图片引用方法一">
-
-<p><img src="/test.png" alt="图片引用方法二"></p>
-<p><img src="/images/test.png" alt="图片引用方法三"></p>
-<h1 id="命令简写"><a href="#命令简写" class="headerlink" title="命令简写"></a>命令简写</h1><ul>
-<li>hexo n “我的博客” &#x3D;&#x3D; hexo new “我的博客” #新建文章</li>
-<li>hexo g &#x3D;&#x3D; hexo generate #生成</li>
-<li>hexo s &#x3D;&#x3D; hexo server #启动服务预览</li>
-<li>hexo d &#x3D;&#x3D; hexo deploy #部署</li>
-<li>hexo server #Hexo会监视文件变动并自动更新，无须重启服务器</li>
-<li>hexo server -s #静态模式</li>
-<li>hexo server -p 5000 #更改端口</li>
-<li>hexo server -i 192.168.1.1 #自定义 IP</li>
-<li>hexo clean #清除缓存，若是网页正常情况下可以忽略这条命令</li>
-</ul>
-<h1 id="记录"><a href="#记录" class="headerlink" title="记录"></a>记录</h1><p>Q: 使用主题后出现<code>&#123;% extends '_layout.swig' %&#125;</code>错误</p>
-<p>A: hexo在5.0之后不再自带swig，需要手动安装：npm i hexo-renderer-swig</p>
-
+          <p>博客整体搬迁到了Hexo，正在缓慢恢复以前的Log，有空写一篇GithubPages+Hexo的建立步骤记录</p>
+<p>这是一篇测试文章，同时记录一些Hexo相关的信息</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/07/03/%E6%B5%8B%E8%AF%95%E6%96%87%E7%AB%A0/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -392,7 +385,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-09-01 21:51:35" itemprop="dateModified" datetime="2022-09-01T21:51:35+08:00">2022-09-01</time>
+      <time title="修改时间：2022-09-01 22:30:57" itemprop="dateModified" datetime="2022-09-01T22:30:57+08:00">2022-09-01</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -414,14 +407,16 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>关于tex2D的一些工作方式</p>
-<p>纹理(Textures)储存数值数据，每个通道的值范围一般在0.0到1.0之间（例如<code>rgba</code>）。不同的纹理各自有不同的最大&#x2F;最小值范围，不同的精度级别，和不同的伽马曲线，<strong>但着色器从<code>tex2D()</code>得到的值形式总是一个包含四个分量的浮点向量</strong>。四个分量分别映射到纹理的四个通道，可以独立地访问，也可以以<code>.rgba</code>或<code>.xyzw</code>的形式在HLSL中访问。所以<code>.x</code>，<code>.r</code>，甚至像<code>.ag</code>或<code>.zxx</code>这样的混用都是有效的。但是<code>.xg</code>是不允许的，在指定使用的分量时不允许同时使用<code>xyzw</code>和<code>rgba</code>。<code>valueA.x = valueB.r</code>是允许的。</p>
-<p>但是不是所有的纹理都包含所有4个有效的分量，有些只有RGB，或RG，或R，或者只有A。<strong>而<code>tex2D()</code>总是返回一个<code>float4</code>的结构</strong>，没有保存的通道信息则取决于纹理格式返回一个0.0到1.0之间的值。大多数情况下通道值会返回0.0，但是有一些RGB纹理格式的A通道会返回1.0。</p>
-<p>关于不同类型之间的赋值，如果将一个<code>float4</code>类型的右值赋予一个<code>float</code>类型的左值，只有第一个分量会被用到。所以，以下赋值的效果是完全一致的：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">float result = float4(1, 2, 3, 4);</span><br><span class="line">float result = float4(1, 2, 3, 4).x;</span><br><span class="line">float result = float4(1, 2, 3, 4).r;</span><br><span class="line">float result = 1;</span><br></pre></td></tr></table></figure>
-
-<p>此外，如果你习惯于以字节表示法看到颜色值，例如：从0到255的整数值。这是每个通道颜色的8位存储的文字表示，但不是它们被读取的方式。对于着色器来说，颜色值被视为一个范围为0.0到1.0，精度为1.0&#x2F;255.0的浮点数。然后是sRGB，在着色器取色之前，它可能应用额外的0.0到1.0范围的伽马曲线。</p>
-
+          <p>关于tex2D的数据结构和一些工作方式</p>
+<p>纹理(Textures)储存数值数据，每个通道的值范围一般在0.0到1.0之间（例如<code>rgba</code>）。不同的纹理各自有不同的最大&#x2F;最小值范围，不同的精度级别，和不同的伽马曲线，<strong>但着色器从<code>tex2D()</code>得到的值形式总是一个包含四个分量的浮点向量</strong>。
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/05/11/%E5%85%B3%E4%BA%8Etex2D/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
