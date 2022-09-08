@@ -2,9 +2,9 @@
 title: 关于tex2D
 date: 2021-05-11 17:47:46
 tags:
-- rendering
+- Rendering
 categories:
-- tech
+- Tech
 ---
 
 关于tex2D的数据结构和一些工作方式
