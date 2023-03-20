@@ -117,7 +117,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">需求</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">2.1.</span> <span class="nav-text">B样条</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">2.2.</span> <span class="nav-text">运动过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">2.3.</span> <span class="nav-text">曲线控制点的运行时定位方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">2.4.</span> <span class="nav-text">跟踪情形</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9C%80%E6%B1%82"><span class="nav-number">1.</span> <span class="nav-text">需求</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.</span> <span class="nav-text">实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#b%E6%A0%B7%E6%9D%A1"><span class="nav-number">2.1.</span> <span class="nav-text">B样条</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%90%E5%8A%A8%E8%BF%87%E7%A8%8B"><span class="nav-number">2.2.</span> <span class="nav-text">运动过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9B%B2%E7%BA%BF%E6%8E%A7%E5%88%B6%E7%82%B9%E7%9A%84%E8%BF%90%E8%A1%8C%E6%97%B6%E5%AE%9A%E4%BD%8D%E6%96%B9%E5%BC%8F"><span class="nav-number">2.3.</span> <span class="nav-text">曲线控制点的运行时定位方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B7%9F%E8%B8%AA%E6%83%85%E5%BD%A2"><span class="nav-number">2.4.</span> <span class="nav-text">跟踪情形</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -248,15 +248,15 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h1><span id="需求">需求</span></h1><p>设计师希望可以完全自定义地描述某些投射物的弹道曲线。该曲线需要支持跟踪和确定目标点。</p>
+        <h1 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h1><p>设计师希望可以完全自定义地描述某些投射物的弹道曲线。该曲线需要支持跟踪和确定目标点。</p>
 <span id="more"></span>
 
-<h1><span id="实现">实现</span></h1><h2><span id="b样条">B样条</span></h2><p>本曲线使用的基本理论是B样条，B样条是受多个控制点约束而绘制出的样条曲线。它相对于类似原理的贝赛尔曲线具有更好的局部性性质，用户调整其中部分控制点时曲线整体不会受到影响。</p>
+<h1 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h1><h2 id="b样条"><a href="#B样条" class="headerlink" title="B样条"></a>B样条</h2><p>本曲线使用的基本理论是B样条，B样条是受多个控制点约束而绘制出的样条曲线。它相对于类似原理的贝赛尔曲线具有更好的局部性性质，用户调整其中部分控制点时曲线整体不会受到影响。</p>
 <p><strong>△ 表现上可以近似地理解为抛射物被控制点吸引地向正方向移动。</strong></p>
 <p>本实现中生成的B样条是一组曲线上的有序顶点。</p>
 <p>B样条的数学推导相对复杂，本文档不会包含相关内容。但是可以参考下方链接：</p>
 <p><a target="_blank" rel="noopener" href="https://www.qiujiawei.com/b-spline-1/">https://www.qiujiawei.com/b-spline-1/</a></p>
-<h2><span id="运动过程">运动过程</span></h2><p>每一帧都更新目标位置<code>targetPos</code>、逻辑直线运动总时间<code>directFullTime</code>、抛射物当前运动时间<code>curLifeTime</code>，计算过程中速度和加速度都参与计算。</p>
+<h2 id="运动过程"><a href="#运动过程" class="headerlink" title="运动过程"></a>运动过程</h2><p>每一帧都更新目标位置<code>targetPos</code>、逻辑直线运动总时间<code>directFullTime</code>、抛射物当前运动时间<code>curLifeTime</code>，计算过程中速度和加速度都参与计算。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">private void UpdateDirectInfo() &#123;</span><br><span class="line">    fullDirectDis = Vector3.Distance(targetPos, startPos);</span><br><span class="line"></span><br><span class="line">    // 计算移动时间</span><br><span class="line">    directFullTime = 0;</span><br><span class="line">    float a = 0.5f * acceleration;</span><br><span class="line">    float b = moveSpeed;</span><br><span class="line">    float c = -fullDirectDis;</span><br><span class="line">    float check = b * b - 4 * a * c;</span><br><span class="line">    if (a != 0 &amp;&amp; check &gt;= 0) &#123;</span><br><span class="line">        directFullTime = (-b + Mathf.Sqrt(check)) / (2 * a);</span><br><span class="line">        if (directFullTime &lt; 0) &#123;</span><br><span class="line">            directFullTime = (-b - Mathf.Sqrt(check)) / (2 * a);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        directFullTime = fullDirectDis / moveSpeed;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    if (directFullTime &lt; minLifeTime) &#123;</span><br><span class="line">        this.moveSpeed = fullDirectDis / minLifeTime;</span><br><span class="line">        directFullTime = minLifeTime;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <ol>
 <li><p>每一帧上，直线上运动进度百分比为<code>directRate = curLifeTime / directFullTime</code>，因为曲线运动和直线运动抵达终点的时刻应相同，所以曲线上的运动进度百分比也应该等于<code>directRate</code>。</p>
@@ -275,8 +275,8 @@
 </ul>
 </li>
 </ol>
-<h2><span id="曲线控制点的运行时定位方式">曲线控制点的运行时定位方式</span></h2><p>（咕）</p>
-<h2><span id="跟踪情形">跟踪情形</span></h2><p>当抛射物目标点动态变化时，原有曲线将无法准确命中目标。<del>因此在每一帧Tick时，需要更新曲线的最后一个顶点和曲线全长，以保证终点无误。</del></p>
+<h2 id="曲线控制点的运行时定位方式"><a href="#曲线控制点的运行时定位方式" class="headerlink" title="曲线控制点的运行时定位方式"></a>曲线控制点的运行时定位方式</h2><p>（咕）</p>
+<h2 id="跟踪情形"><a href="#跟踪情形" class="headerlink" title="跟踪情形"></a>跟踪情形</h2><p>当抛射物目标点动态变化时，原有曲线将无法准确命中目标。<del>因此在每一帧Tick时，需要更新曲线的最后一个顶点和曲线全长，以保证终点无误。</del></p>
 <p><del>这会产生的问题是，抛射物运动轨迹的最后一部分将会是一条斜率可能发生突变的线段，但在绝大多数帧相关的情形中难以察觉。</del></p>
 <blockquote>
 <p><del>为什么不实时生成新的曲线，然后重新对抛射物做当帧定位？</del></p>

@@ -117,7 +117,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">需求</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">2.1.</span> <span class="nav-text">前提和已知信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">2.2.</span> <span class="nav-text">简单推导</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">2.2.1.</span> <span class="nav-text">纵向初速度initV</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">2.2.2.</span> <span class="nav-text">弹跳次数n &amp; 纵向速度损失系数k</span></a></li></ol></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9C%80%E6%B1%82"><span class="nav-number">1.</span> <span class="nav-text">需求</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.</span> <span class="nav-text">实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E6%8F%90%E5%92%8C%E5%B7%B2%E7%9F%A5%E4%BF%A1%E6%81%AF"><span class="nav-number">2.1.</span> <span class="nav-text">前提和已知信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E6%8E%A8%E5%AF%BC"><span class="nav-number">2.2.</span> <span class="nav-text">简单推导</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%B5%E5%90%91%E5%88%9D%E9%80%9F%E5%BA%A6initv"><span class="nav-number">2.2.1.</span> <span class="nav-text">纵向初速度initV</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%B9%E8%B7%B3%E6%AC%A1%E6%95%B0n-amp-%E7%BA%B5%E5%90%91%E9%80%9F%E5%BA%A6%E6%8D%9F%E5%A4%B1%E7%B3%BB%E6%95%B0k"><span class="nav-number">2.2.2.</span> <span class="nav-text">弹跳次数n &amp; 纵向速度损失系数k</span></a></li></ol></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -248,7 +248,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h1><span id="需求">需求</span></h1><p>设计师希望抛射物可以在表现上受重力影响，并希望其拥有包含重力方向速度损耗的弹跳表现。 </p>
+        <h1 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h1><p>设计师希望抛射物可以在表现上受重力影响，并希望其拥有包含重力方向速度损耗的弹跳表现。 </p>
 <ol>
 <li>起始的抛射高度要相对角色较高</li>
 <li>每次弹跳后的最大纵向高度的下降表现需要相对均匀</li>
@@ -257,7 +257,7 @@
 </ol>
 <span id="more"></span>
 
-<h1><span id="实现">实现</span></h1><h2><span id="前提和已知信息">前提和已知信息</span></h2><ol>
+<h1 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h1><h2 id="前提和已知信息"><a href="#前提和已知信息" class="headerlink" title="前提和已知信息"></a>前提和已知信息</h2><ol>
 <li><p>前提，抛体运动是一种只受重力影响的运动过程。</p>
 </li>
 <li><p>前提，水平面上的速度不会因为碰撞损失。</p>
@@ -279,10 +279,10 @@
 <blockquote>
 <p>输出目的：构建一组最大高度逐渐降低，并使得在最终终点处高度尽量接近0的二次曲线。</p>
 </blockquote>
-<h2><span id="简单推导">简单推导</span></h2><p>不考虑加速度和初始高度。</p>
+<h2 id="简单推导"><a href="#简单推导" class="headerlink" title="简单推导"></a>简单推导</h2><p>不考虑加速度和初始高度。</p>
 <p>首先，我们需要获得逻辑上的直线运动时间<strong>t</strong>，这等于曲线运动的时间。<code>t = directDis / horV</code>。</p>
 <p>然后，我们乐观地假定碰撞时刻的纵向速度损失系数<strong>k</strong>是一个<strong>常数输入</strong>，以此开始分情况讨论：</p>
-<h3><span id="纵向初速度initv">纵向初速度initV</span></h3><ol>
+<h3 id="纵向初速度initv"><a href="#纵向初速度initV" class="headerlink" title="纵向初速度initV"></a>纵向初速度initV</h3><ol>
 <li>一次弹跳也不发生，即整个运动过程里只有一条二次曲线，逻辑起点和逻辑终点分别处于曲线的两个零点上。<ol>
 <li>因为只有一条二次曲线，所以抛射物运动到曲线最高点、纵向速度为零的时间是<code>t / 2</code>。</li>
 <li>显然在这种情况下<code>initV = g * t / 2</code>。</li>
@@ -306,7 +306,7 @@
 </li>
 </ol>
 <p>通过上方推导得出的纵向初始速度，我们发现等式依然缺少一些参数：<strong>k</strong>和<strong>n</strong>。</p>
-<h3><span id="弹跳次数n-amp-纵向速度损失系数k">弹跳次数n &amp; 纵向速度损失系数k</span></h3><p>常识中的物体弹跳会不断损失速度，最终停止弹跳，或静止或在水平面运动。出于需求3，弹跳次数n需要与水平移动时间t正相关，于是我们可以近似地将n赋值为t。可得：</p>
+<h3 id="弹跳次数n-amp-纵向速度损失系数k"><a href="#弹跳次数n-amp-纵向速度损失系数k" class="headerlink" title="弹跳次数n &amp; 纵向速度损失系数k"></a>弹跳次数n &amp; 纵向速度损失系数k</h3><p>常识中的物体弹跳会不断损失速度，最终停止弹跳，或静止或在水平面运动。出于需求3，弹跳次数n需要与水平移动时间t正相关，于是我们可以近似地将n赋值为t。可得：</p>
 <p><code>n = t</code></p>
 <p><code>initV = (g * t / 2 + Σ(Floor(t), i = 0) i * k) / (t + 1)</code></p>
 <p>先前我们假定k是一个常数系数，但在不同的水平移动距离情况下，常数系数无法满足需求4，因此k会是一个与initV正相关、与n反比例相关的表达式。即每次弹跳时，当前速度都会均匀地减少，需要发生的弹跳次数越多，每次弹跳损失的速度越少。可得：</p>

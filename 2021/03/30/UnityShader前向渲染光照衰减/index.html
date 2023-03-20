@@ -118,7 +118,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%8E%9F%E7%90%86%EF%BC%9A"><span class="nav-number">1.</span> <span class="nav-text">原理：</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%8E%9F%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">原理：</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -249,7 +249,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h6 id="原理："><a href="#原理：" class="headerlink" title="原理："></a>原理：</h6><p>Unity使用一张纹理作为查找表来在片元着色器中计算逐像素光照的衰减。这样的好处在于，计算衰减不依赖于数学公式的复杂性，只要使用一个参数值去纹理中采样即可。但使用纹理查找来计算衰减也有一些弊端：</p>
+        <h6 id="原理"><a href="#原理：" class="headerlink" title="原理："></a>原理：</h6><p>Unity使用一张纹理作为查找表来在片元着色器中计算逐像素光照的衰减。这样的好处在于，计算衰减不依赖于数学公式的复杂性，只要使用一个参数值去纹理中采样即可。但使用纹理查找来计算衰减也有一些弊端：</p>
 <ul>
 <li>需要预处理得到采样纹理，而且纹理的大小也会影响衰减的精度。</li>
 <li>不直观，同时也不方便，因此一旦把数据存储到查找表中，我们就无法使用其他数学公式来计算衰减。</li>
