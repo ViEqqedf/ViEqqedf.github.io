@@ -21,6 +21,7 @@ categories:
 
 ```c#
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 
@@ -119,8 +120,21 @@ namespace Reflection
                     Console.WriteLine("     Field:{0}", f.Name);
                 Console.WriteLine();
             }
-            Console.WriteLine("End!");
+            Console.WriteLine("End!\n");
             Console.ReadKey();
+
+            /*
+            输出结果：
+
+            Object Type: BaseClass
+            Field:BaseField
+
+            Object Type: DerivedClass
+                Field:DerivedField
+                Field:BaseField
+
+            End!
+            */
 
             #endregion
 
@@ -129,12 +143,9 @@ namespace Reflection
             var intArray = typeof(int).MakeArrayType();
             var int3Array = typeof(int).MakeArrayType(3);
 
-            Console.WriteLine($"是否是int 数组 intArray == typeof(int[]) ：
-				{intArray == typeof(int[]) }");
-            Console.WriteLine($"是否是int 3维数组 intArray3 == typeof(int[]) ：
-				{int3Array == typeof(int[]) }");
-            Console.WriteLine($"是否是int 3维数组 intArray3 == typeof(int[,,])：
-				{int3Array == typeof(int[,,]) }");
+            Console.WriteLine($"是否是int 数组 intArray == typeof(int[]) ：{intArray == typeof(int[]) }");
+            Console.WriteLine($"是否是int 3维数组 intArray3 == typeof(int[]) ：{int3Array == typeof(int[]) }");
+            Console.WriteLine($"是否是int 3维数组 intArray3 == typeof(int[,,])：{int3Array == typeof(int[,,]) }");
 
             //数组元素的类型
             Type elementType = intArray.GetElementType();
@@ -146,7 +157,20 @@ namespace Reflection
             //获取数组的维数
             var rank = int3Array.GetArrayRank();
             Console.WriteLine($"{int3Array}类型维数：{rank }");
+            Console.WriteLine("End!\n");
             Console.ReadKey();
+
+            /*
+            输出结果：
+
+            是否是int 数组 intArray == typeof(int[]) ：True
+            是否是int 3维数组 intArray3 == typeof(int[]) ：False
+            是否是int 3维数组 intArray3 == typeof(int[,,])：True
+            System.Int32[]类型元素类型：System.Int32
+            System.Int32[,,]类型元素类型：System.Int32
+            System.Int32[,,]类型维数：3
+            End!
+            */
 
             #endregion
 
@@ -163,7 +187,17 @@ namespace Reflection
                 Console.WriteLine($"{t}访问 {t.IsNestedPublic}");
             }
 
+            Console.WriteLine("End!\n");
             Console.ReadKey();
+
+            /*
+            输出结果：
+
+            NestedType =Reflection.Class+Student
+            Reflection.Class+Student访问 False
+            Reflection.Class+Student访问 True
+            End! 
+            */
 
             #endregion
 
@@ -187,7 +221,34 @@ namespace Reflection
             PrintTypeName(type2);
             Console.WriteLine($"\n------------封闭式泛型-------------");
             PrintTypeName(type3);
+
+            Console.WriteLine("End!\n");
             Console.ReadKey();
+
+            /* 
+            输出结果：
+
+            ------------一般类型-------------
+            NameSpace: Reflection
+            Name :Class
+            FullName: Reflection.Class
+
+            ------------嵌套类型-------------
+            NameSpace: Reflection
+            Name :Student
+            FullName: Reflection.Class+Student
+
+            ------------非封闭式泛型-------------
+            NameSpace: System.Collections.Generic
+            Name :Dictionary`2
+            FullName: System.Collections.Generic.Dictionary`2
+
+            ------------封闭式泛型-------------
+            NameSpace: System.Collections.Generic
+            Name :Dictionary`2
+            FullName: System.Collections.Generic.Dictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]
+            End!
+            */
 
             #endregion
 
@@ -273,7 +334,7 @@ namespace Reflection
 
             //获得一个类型的时候需要完整的"命名空间"+"类名"
             //ex.CLR只知"System.Int32"不知"int"
-            Type classType = Type.GetType(typeof(InvokeClass).FullName);
+            classType = Type.GetType(typeof(InvokeClass).FullName);
             InvokeClass instance = (InvokeClass)Activator.
 				CreateInstance(classType);
 
@@ -289,6 +350,29 @@ namespace Reflection
             string result = method.Invoke(instance, 
 				new object[] { "ViE" }).ToString();
             Console.WriteLine(result);
+            
+            Console.WriteLine("End!\n");
+            Console.ReadKey();
+
+            /*
+            输出结果：
+            
+            iType : IComparable
+            iType : IFormattable
+            iType : IConvertible
+            iType : IComparable`1
+            iType : IEquatable`1
+            DateTime1: 2019/6/19 0:00:00
+            staticD：3
+            instanceD：30
+            List<int> 类型System.Collections.Generic.List`1[System.Int32]
+            List<> 类型System.Collections.Generic.List`1[T]
+            List<> MakeGenericType执行后 类型System.Collections.Generic.List`1[System.Int32]
+            List<int> GetGenericTypeDefinition执行后 类型System.Collections.Generic.List`1[T]
+            我调用了InvokeClass的TestMethod方法
+            我调用了InvokeClass的TestFormat方法，传入了ViE参数
+            End! 
+            */
 
             #endregion
         }
