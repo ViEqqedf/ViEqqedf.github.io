@@ -70,6 +70,14 @@ public static async Task Main(string[] args) {
 
 {% asset_img image-20230410213200891.png 测试结果 %}
 
+# 另一个问题
+
+重用HttpClient实例会产生另一个问题：当DNS发生变更时无法重新加载和解析，必须重新创建实例。
+
+在这种情形下，微软建议我们使用```IHttpClientFactory```来管理HttpClient的生命周期，并执行各类操作
+
+详情请参考[IHttpClientFactory官方手册](https://learn.microsoft.com/zh-cn/dotnet/core/extensions/httpclient-factory)
+
 # 引用
 
 1. [HttpClient 类](https://learn.microsoft.com/zh-cn/dotnet/api/System.Net.Http.HttpClient?view=net-7.0)
