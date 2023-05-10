@@ -1,6 +1,6 @@
 ---
 title: Is "if (gameObject == null) {}" equals to "gameObject?." in Unity?
-date: 2023-05-10 21:10:02
+date: 2023-05-02 15:10:02
 tags:
 - Unity
 - Scripting
@@ -16,9 +16,19 @@ categories:
 
 <!--more-->
 
--------
+描述得详细些：现有一```UnityEngine.GameObject```类型对象```testGo```，分别对该对象做如下两个操作，产生的结果是否相同？
 
-# 问题
+```c#
+UnityEngine.Object.Destroy(testGo);
+if(testGo != null) {
+    testGo.SetActive(false);
+}
+```
+
+```c#
+UnityEngine.Object.Destroy(testGo);
+testGo?.SetActive(false);
+```
 
 
 
