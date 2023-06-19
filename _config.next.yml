@@ -824,7 +824,7 @@ mermaid:
 # For more information: http://velocityjs.org
 motion:
   enable: true
-  async: false
+  async: true
   transition:
     # Transition variants:
     # fadeIn | flipXIn | flipYIn | flipBounceXIn | flipBounceYIn
@@ -838,7 +838,7 @@ motion:
     post_body: slideDownIn
     coll_header: slideLeftIn
     # Only for Pisces | Gemini.
-    sidebar: slideUpIn
+    sidebar: fadeIn
 
 # Progress bar in the top during page loading.
 # Dependencies: https://github.com/theme-next/theme-next-pace
