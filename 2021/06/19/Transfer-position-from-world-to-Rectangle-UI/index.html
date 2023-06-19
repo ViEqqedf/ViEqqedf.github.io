@@ -19,28 +19,28 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"vieqqedf.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.16.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"style":null,"show_result":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="关于tex2D的数据结构和一些工作方式 纹理(Textures)储存数值数据，每个通道的值范围一般在0.0到1.0之间（例如rgba）。不同的纹理各自有不同的最大&#x2F;最小值范围，不同的精度级别，和不同的伽马曲线，但着色器从tex2D()得到的值形式总是一个包含四个分量的浮点向量。">
+    <meta name="description" content="世界坐标→屏幕坐标→UI坐标 12345Vector3 screenPos &#x3D; (Camera)mainCamera.WorldToScreenPoint(worldPos);if (RectTransformUtility.ScreenPointToLocalPointInRectangle(    (RectTransform)uiWindow.transform, screenPos, (C">
 <meta property="og:type" content="article">
-<meta property="og:title" content="关于tex2D">
-<meta property="og:url" content="https://vieqqedf.github.io/2021/05/11/%E5%85%B3%E4%BA%8Etex2D/index.html">
+<meta property="og:title" content="一种在Unity中从世界坐标转UI坐标的方法">
+<meta property="og:url" content="https://vieqqedf.github.io/2021/06/19/Transfer-position-from-world-to-Rectangle-UI/index.html">
 <meta property="og:site_name" content="ViE Here!">
-<meta property="og:description" content="关于tex2D的数据结构和一些工作方式 纹理(Textures)储存数值数据，每个通道的值范围一般在0.0到1.0之间（例如rgba）。不同的纹理各自有不同的最大&#x2F;最小值范围，不同的精度级别，和不同的伽马曲线，但着色器从tex2D()得到的值形式总是一个包含四个分量的浮点向量。">
+<meta property="og:description" content="世界坐标→屏幕坐标→UI坐标 12345Vector3 screenPos &#x3D; (Camera)mainCamera.WorldToScreenPoint(worldPos);if (RectTransformUtility.ScreenPointToLocalPointInRectangle(    (RectTransform)uiWindow.transform, screenPos, (C">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-05-11T09:47:46.000Z">
-<meta property="article:modified_time" content="2023-05-11T06:09:48.571Z">
+<meta property="article:published_time" content="2021-06-19T02:21:14.000Z">
+<meta property="article:modified_time" content="2023-06-19T02:25:34.002Z">
 <meta property="article:author" content="VirrorE">
-<meta property="article:tag" content="Rendering">
+<meta property="article:tag" content="Unity">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://vieqqedf.github.io/2021/05/11/%E5%85%B3%E4%BA%8Etex2D/">
+<link rel="canonical" href="https://vieqqedf.github.io/2021/06/19/Transfer-position-from-world-to-Rectangle-UI/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://vieqqedf.github.io/2021/05/11/%E5%85%B3%E4%BA%8Etex2D/","path":"2021/05/11/关于tex2D/","title":"关于tex2D"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://vieqqedf.github.io/2021/06/19/Transfer-position-from-world-to-Rectangle-UI/","path":"2021/06/19/Transfer-position-from-world-to-Rectangle-UI/","title":"一种在Unity中从世界坐标转UI坐标的方法"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>关于tex2D | ViE Here!</title>
+<title>一种在Unity中从世界坐标转UI坐标的方法 | ViE Here!</title>
   
 
 
@@ -173,7 +173,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://vieqqedf.github.io/2021/05/11/%E5%85%B3%E4%BA%8Etex2D/">
+    <link itemprop="mainEntityOfPage" href="https://vieqqedf.github.io/2021/06/19/Transfer-position-from-world-to-Rectangle-UI/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/VirrorE.jpg">
@@ -186,12 +186,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="关于tex2D | ViE Here!">
+      <meta itemprop="name" content="一种在Unity中从世界坐标转UI坐标的方法 | ViE Here!">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          关于tex2D
+          一种在Unity中从世界坐标转UI坐标的方法
         </h1>
 
         <div class="post-meta-container">
@@ -202,14 +202,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2021-05-11 17:47:46" itemprop="dateCreated datePublished" datetime="2021-05-11T17:47:46+08:00">2021-05-11</time>
+      <time title="创建时间：2021-06-19 10:21:14" itemprop="dateCreated datePublished" datetime="2021-06-19T10:21:14+08:00">2021-06-19</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-05-11 14:09:48" itemprop="dateModified" datetime="2023-05-11T14:09:48+08:00">2023-05-11</time>
+      <time title="修改时间：2023-06-19 10:25:34" itemprop="dateModified" datetime="2023-06-19T10:25:34+08:00">2023-06-19</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -230,13 +230,8 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>关于tex2D的数据结构和一些工作方式</p>
-<p>纹理(Textures)储存数值数据，每个通道的值范围一般在0.0到1.0之间（例如<code>rgba</code>）。不同的纹理各自有不同的最大&#x2F;最小值范围，不同的精度级别，和不同的伽马曲线，<strong>但着色器从<code>tex2D()</code>得到的值形式总是一个包含四个分量的浮点向量</strong>。<span id="more"></span>四个分量分别映射到纹理的四个通道，可以独立地访问，也可以以<code>.rgba</code>或<code>.xyzw</code>的形式在HLSL中访问。所以<code>.x</code>，<code>.r</code>，甚至像<code>.ag</code>或<code>.zxx</code>这样的混用都是有效的。但是<code>.xg</code>是不允许的，在指定使用的分量时不允许同时使用<code>xyzw</code>和<code>rgba</code>。<code>valueA.x = valueB.r</code>是允许的。</p>
-<p>但是不是所有的纹理都包含所有4个有效的分量，有些只有RGB，或RG，或R，或者只有A。<strong>而<code>tex2D()</code>总是返回一个<code>float4</code>的结构</strong>，没有保存的通道信息则取决于纹理格式返回一个0.0到1.0之间的值。大多数情况下通道值会返回0.0，但是有一些RGB纹理格式的A通道会返回1.0。</p>
-<p>关于不同类型之间的赋值，如果将一个<code>float4</code>类型的右值赋予一个<code>float</code>类型的左值，只有第一个分量会被用到。所以，以下赋值的效果是完全一致的：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">float result = float4(1, 2, 3, 4);</span><br><span class="line">float result = float4(1, 2, 3, 4).x;</span><br><span class="line">float result = float4(1, 2, 3, 4).r;</span><br><span class="line">float result = 1;</span><br></pre></td></tr></table></figure>
-
-<p>此外，如果你习惯于以字节表示法看到颜色值，例如：从0到255的整数值。这是每个通道颜色的8位存储的文字表示，但不是它们被读取的方式。对于着色器来说，颜色值被视为一个范围为0.0到1.0，精度为1.0&#x2F;255.0的浮点数。然后是sRGB，在着色器取色之前，它可能应用额外的0.0到1.0范围的伽马曲线。</p>
+    <div class="post-body" itemprop="articleBody"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>世界坐标→屏幕坐标→UI坐标</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Vector3 screenPos = (Camera)mainCamera.WorldToScreenPoint(worldPos);</span><br><span class="line"><span class="keyword">if</span> (RectTransformUtility.ScreenPointToLocalPointInRectangle(</span><br><span class="line">    (RectTransform)uiWindow.transform, screenPos, (Camera)uiCamera, <span class="keyword">out</span> Vector2 localPoint)) &#123;</span><br><span class="line">    transform.localPosition = localPoint + extraOffset + verticalOffset;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
     </div>
 
@@ -246,20 +241,20 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/Rendering/" rel="tag"># Rendering</a>
+              <a href="/tags/Unity/" rel="tag"># Unity</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2021/05/10/%E8%B4%B4%E5%9B%BE%E5%88%B6%E4%BD%9C%E5%BB%BA%E8%AE%AE/" rel="prev" title="贴图制作建议">
-                  <i class="fa fa-chevron-left"></i> 贴图制作建议
+                <a href="/2021/05/11/%E5%85%B3%E4%BA%8Etex2D/" rel="prev" title="关于tex2D">
+                  <i class="fa fa-chevron-left"></i> 关于tex2D
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2021/06/19/Transfer-position-from-world-to-Rectangle-UI/" rel="next" title="一种在Unity中从世界坐标转UI坐标的方法">
-                  一种在Unity中从世界坐标转UI坐标的方法 <i class="fa fa-chevron-right"></i>
+                <a href="/2022/07/03/%E6%B5%8B%E8%AF%95%E6%96%87%E7%AB%A0/" rel="next" title="测试文章">
+                  测试文章 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
           </div>
