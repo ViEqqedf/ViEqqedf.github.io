@@ -18,8 +18,6 @@ categories:
 
 # 快速开始
 
-如何快速使用场景管理器把业务跑起来？
-
 ## 视图状态(GameViewStatus)
 
 ### 第一步
