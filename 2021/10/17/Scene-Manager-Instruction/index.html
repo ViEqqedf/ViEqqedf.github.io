@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/VirrorE.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/VirrorE.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/VirrorE.jpg">
+  <link rel="mask-icon" href="/images/VirrorE.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"vieqqedf.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.17.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"style":null,"show_result":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"fadeIn"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这篇Blog是以往工作中编写的一个场景管理器的说明文档，它的主要功能是管理游戏内场景跳转、视图状态和UI的生命周期。虽然管理器本身已经停止使用和维护，但其中的一些思考成果依然对我有效，故在此记录并归档。 话说回来，现在看来这套东西的启动效率其实有点低啊（笑">
+<meta property="og:type" content="article">
+<meta property="og:title" content="场景管理器说明书">
+<meta property="og:url" content="https://vieqqedf.github.io/2021/10/17/Scene-Manager-Instruction/index.html">
+<meta property="og:site_name" content="ViE Here!">
+<meta property="og:description" content="这篇Blog是以往工作中编写的一个场景管理器的说明文档，它的主要功能是管理游戏内场景跳转、视图状态和UI的生命周期。虽然管理器本身已经停止使用和维护，但其中的一些思考成果依然对我有效，故在此记录并归档。 话说回来，现在看来这套东西的启动效率其实有点低啊（笑">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-10-17T09:24:22.000Z">
+<meta property="article:modified_time" content="2023-06-25T06:39:46.887Z">
+<meta property="article:author" content="VirrorE">
+<meta property="article:tag" content="C#">
+<meta property="article:tag" content="Frame_Design">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://vieqqedf.github.io/2021/10/17/Scene-Manager-Instruction/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://vieqqedf.github.io/2021/10/17/Scene-Manager-Instruction/","path":"2021/10/17/Scene-Manager-Instruction/","title":"场景管理器说明书"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>场景管理器说明书 | ViE Here!</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">ViE Here!</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">难道你想看到“宁静致远”之类的东西吗（笑</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B"><span class="nav-number">1.</span> <span class="nav-text">快速开始</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%86%E5%9B%BE%E7%8A%B6%E6%80%81gameviewstatus"><span class="nav-number">1.1.</span> <span class="nav-text">视图状态(GameViewStatus)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5"><span class="nav-number">1.1.1.</span> <span class="nav-text">第一步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5"><span class="nav-number">1.1.2.</span> <span class="nav-text">第二步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E6%AD%A5"><span class="nav-number">1.1.3.</span> <span class="nav-text">第三步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E5%9B%9B%E6%AD%A5%E5%AE%B9%E6%98%93%E9%81%97%E6%BC%8F"><span class="nav-number">1.1.4.</span> <span class="nav-text">第四步（容易遗漏！）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%86%E5%9B%BE%E7%8A%B6%E6%80%81%E9%99%84%E5%B1%9E%E7%95%8C%E9%9D%A2additional-panel"><span class="nav-number">1.2.</span> <span class="nav-text">视图状态附属界面(Additional Panel)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A1%A5%E5%85%85%E4%BB%8B%E7%BB%8D"><span class="nav-number">2.</span> <span class="nav-text">补充介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C%E6%A0%88%E5%92%8C%E8%A7%86%E5%9B%BE%E9%93%BE"><span class="nav-number">2.1.</span> <span class="nav-text">操作栈和视图链</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C%E6%A0%88"><span class="nav-number">2.1.1.</span> <span class="nav-text">操作栈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%86%E5%9B%BE%E9%93%BE"><span class="nav-number">2.1.2.</span> <span class="nav-text">视图链</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#viewstatusinfo"><span class="nav-number">2.2.</span> <span class="nav-text">ViewStatusInfo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%A5%E5%9C%BA%E8%AF%B7%E6%B1%82enterrequest"><span class="nav-number">2.3.</span> <span class="nav-text">入场请求(EnterRequest)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%86%E5%9B%BE%E7%8A%B6%E6%80%81%E9%99%84%E5%B1%9E%E7%95%8C%E9%9D%A2additional-panel"><span class="nav-number">2.4.</span> <span class="nav-text">视图状态附属界面(Additional Panel)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%86%E5%9B%BE%E7%8A%B6%E6%80%81%E4%B8%8E%E6%B8%B8%E6%88%8F%E6%A8%A1%E5%9D%97%E7%BC%96%E5%8F%B7"><span class="nav-number">2.5.</span> <span class="nav-text">视图状态与游戏模块编号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BD%93%E4%BD%A0%E8%B0%83%E7%94%A8gotonextstatus%E7%9A%84%E6%97%B6%E5%80%99%E4%BC%9A%E5%8F%91%E7%94%9F%E4%BB%80%E4%B9%88"><span class="nav-number">2.6.</span> <span class="nav-text">当你调用GoToNextStatus的时候会发生什么？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B6%E5%AE%83"><span class="nav-number">3.</span> <span class="nav-text">其它</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="VirrorE"
+      src="/images/VirrorE.jpg">
+  <p class="site-author-name" itemprop="name">VirrorE</p>
+  <div class="site-description" itemprop="description">sore ga boku no cainou?</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ViEqqedf" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ViEqqedf" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:vieqqedf@gmail.com" title="E-Mail → mailto:vieqqedf@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://vieqqedf.github.io/2021/10/17/Scene-Manager-Instruction/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/VirrorE.jpg">
+      <meta itemprop="name" content="VirrorE">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ViE Here!">
+      <meta itemprop="description" content="sore ga boku no cainou?">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="场景管理器说明书 | ViE Here!">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          场景管理器说明书
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-10-17 17:24:22" itemprop="dateCreated datePublished" datetime="2021-10-17T17:24:22+08:00">2021-10-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-06-25 14:39:46" itemprop="dateModified" datetime="2023-06-25T14:39:46+08:00">2023-06-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Tech/" itemprop="url" rel="index"><span itemprop="name">Tech</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>这篇Blog是以往工作中编写的一个场景管理器的说明文档，它的主要功能是管理游戏内场景跳转、视图状态和UI的生命周期。虽然管理器本身已经停止使用和维护，但其中的一些思考成果依然对我有效，故在此记录并归档。</p>
+<p>话说回来，现在看来这套东西的启动效率其实有点低啊（笑</p>
+<span id="more"></span>
+
+<h1 id="快速开始"><a href="#快速开始" class="headerlink" title="快速开始"></a>快速开始</h1><p>如何快速使用场景管理器把业务跑起来？</p>
+<h2 id="视图状态gameviewstatus"><a href="#视图状态-GameViewStatus" class="headerlink" title="视图状态(GameViewStatus)"></a>视图状态(GameViewStatus)</h2><h3 id="第一步"><a href="#第一步" class="headerlink" title="第一步"></a>第一步</h3><p>在<strong>GameViewStatusEnum</strong>中添加一个状态枚举，名字自定义，编号开头按游戏模块递增，编号末尾以Page的00打头，后续递增。</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="built_in">enum</span> GameViewStatusEnum</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    </span><br><span class="line">	<span class="meta">#<span class="keyword">region</span> 英雄.4</span></span><br><span class="line"></span><br><span class="line">    HeroPage = <span class="number">4000</span>,  <span class="comment">//Page状态必须存在，且一定是x000</span></span><br><span class="line">    HeroMainView = <span class="number">4001</span>,  <span class="comment">//递增</span></span><br><span class="line">    HeroDetailView = <span class="number">4002</span>,</span><br><span class="line">    HeroIncreaseStar = <span class="number">4003</span>,</span><br><span class="line">    HeroMilitaryView = <span class="number">4004</span>,</span><br><span class="line">    HeroQualification = <span class="number">4005</span>,</span><br><span class="line">    HeroReset = <span class="number">4006</span>,</span><br><span class="line"></span><br><span class="line">    <span class="meta">#<span class="keyword">endregion</span></span></span><br><span class="line">        </span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>什么是游戏模块？这个由你决定。通常而言，需要新开一个Page的系统一定是一个游戏模块。但也有例外，例如仅在主场景展示的公告也被定义为一个游戏模块。没有很严格的约束。</p>
+</blockquote>
+<h3 id="第二步"><a href="#第二步" class="headerlink" title="第二步"></a>第二步</h3><p>到<strong>GameViewDefine</strong>的<strong>GameViewStatusInfoMap</strong>中使用刚才写的枚举做状态配置，你会看到其中大量使用了一个叫<em>ViewStatusInfo</em>的类。</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Map&lt;GameViewStatusEnum, ViewStatusInfo&gt; GameViewStatusInfoMap = </span><br><span class="line">    <span class="keyword">new</span> HashMap&lt;GameViewStatusEnum, ViewStatusInfo&gt;()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">	[<span class="meta">GameViewStatusEnum.HeroPage</span>] = <span class="keyword">new</span> ViewStatusInfo(</span><br><span class="line">		<span class="keyword">new</span> <span class="built_in">object</span>[] &#123; PageKeys.HeroPage &#125;,</span><br><span class="line">		<span class="keyword">new</span> GameViewStatusEnum[]</span><br><span class="line">		&#123;</span><br><span class="line">			GameViewStatusEnum.App, GameViewStatusEnum.MainScene,</span><br><span class="line">			GameViewStatusEnum.HeroPage,</span><br><span class="line">		&#125;, GameViewStatusEnum.App, <span class="literal">true</span>),</span><br><span class="line">	[<span class="meta">GameViewStatusEnum.HeroMainView</span>] = <span class="keyword">new</span> ViewStatusInfo(</span><br><span class="line">		<span class="keyword">new</span> <span class="built_in">object</span>[] &#123; UIKeys.HeroMainPanel &#125;,</span><br><span class="line">		<span class="keyword">new</span> GameViewStatusEnum[]</span><br><span class="line">		&#123;</span><br><span class="line">			GameViewStatusEnum.App, GameViewStatusEnum.MainScene,</span><br><span class="line">			GameViewStatusEnum.HeroPage, GameViewStatusEnum.HeroMainView,</span><br><span class="line">		&#125;),</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>ViewStatusInfo的构造函数接收以下四个参数，此处介绍前两个</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ViewStatusInfo</span>(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="built_in">object</span>[] contentKeys, </span></span></span><br><span class="line"><span class="params"><span class="function">    GameViewStatusEnum[] path, </span></span></span><br><span class="line"><span class="params"><span class="function">    GameViewStatusEnum boundaryStatus = GameViewStatusEnum.App, </span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="built_in">bool</span> ignoreOnBack = <span class="literal">false</span></span>)</span></span><br><span class="line">&#123;</span><br><span class="line">	ViewKeys = contentKeys;</span><br><span class="line">	Path = path;</span><br><span class="line">	IgnoreOnBack = ignoreOnBack;</span><br><span class="line">	BoundaryStatus = boundaryStatus;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><p><strong>ViewKeys</strong><br> 本视图状态要打开的视图(SceneKey、PageKey、UIKey、MapKey)<br>同一个视图状态内不允许同时包含不同层的视图Key.例如<code>&#123;SceneKey, PageKey&#125;</code>或<code>&#123;PageKey, UIKey&#125;</code>等。而同层的<code>&#123;UIKey, MapKey&#125;</code>是可以的。</p>
+</li>
+<li><p><strong>Path</strong></p>
+<p>抵达<u>该视图状态</u>需要经过的完整路径，即必须从起点App状态开始，以<u>该视图状态</u>结束。</p>
+<p>在实际跳转状态时，场景管理器会根据路径配置一个一个状态逐步进入。参考上方的视图状态<code>GameViewStatusEnum.HeroMainView</code>（接下来省略前缀），假定玩家当前正在<code>MainScene</code>，此时跳转到<code>HeroMainView</code>的话，就会先进入<code>HeroPage</code>，再进入<code>HeroMainView</code>。</p>
+</li>
+</ol>
+<p>剩余两个参数目前保留默认值即可，下方再介绍。<strong>但是它们很重要，请记得去下面看。</strong></p>
+<h3 id="第三步"><a href="#第三步" class="headerlink" title="第三步"></a>第三步</h3><p>如果你的视图状态需要在<strong>进入之前</strong>通过请求获取一些数据，那么需要配置<strong>入场请求</strong>。不需要则跳过这步。</p>
+<ol>
+<li>在业务服务中注入<code>GameViewAppService</code></li>
+<li>创建一个方法，在其中调用接口<code>GameViewAppService.SendEnterRequest</code>创建一个入场请求</li>
+<li>去<code>GameViewModule</code>中查找<code>GetEnterRequest</code>方法，在其中添加状态及其对应的入场请求</li>
+</ol>
+<p>结束。</p>
+<h3 id="第四步容易遗漏"><a href="#第四步（容易遗漏！）" class="headerlink" title="第四步（容易遗漏！）"></a>第四步（容易遗漏！）</h3><p>如果你创建了一个新的Scene或Page，请去对应的Builder中添加对应的Controller，没有创建则跳过这步。</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">controllerModule.AddController&lt;GameViewSceneContentController&gt;();  <span class="comment">//Scene需要</span></span><br><span class="line">controllerModule.AddController&lt;GameViewPageContentController&gt;();  <span class="comment">//Page需要</span></span><br></pre></td></tr></table></figure>
+
+<p>添加的位置要求在自动生成的Controller之前，例如</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">OnBuildControllers</span>(<span class="params">IControllerModule controllerModule</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">//要在LegionPageController前面</span></span><br><span class="line">	controllerModule.AddController&lt;GameViewPageContentController&gt;();</span><br><span class="line">            </span><br><span class="line">	controllerModule.AddController&lt;LegionPageController&gt;();</span><br><span class="line">	controllerModule.AddController&lt;ChatController&gt;();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果有特殊情况需要有别的顺序，联系我。</p>
+<hr>
+<p>以上，一个新的视图状态创建完成。接下来就可以用<code>GameViewAppService.GoToNextStatus</code>跳转状态（该接口有多个重载形式）、<code>GameViewAppService.BackPreviousStatus</code>回退状态。</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title">GameViewAppService</span></span><br><span class="line">&#123;        </span><br><span class="line">	<span class="meta">#<span class="keyword">region</span> 状态跳转</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 进入视图状态（不需要上下文）</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;param name=&quot;targetStatus&quot;&gt;</span>目标状态<span class="doctag">&lt;/param&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;returns&gt;</span><span class="doctag">&lt;/returns&gt;</span></span></span><br><span class="line">    <span class="function"><span class="built_in">bool</span> <span class="title">GoToNextViewStatus</span>(<span class="params">GameViewStatusEnum targetStatus</span>)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 进入视图状态（需要入场检查和一个可null的上下文）</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;param name=&quot;targetStatus&quot;&gt;</span><span class="doctag">&lt;/param&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;param name=&quot;enterCheck&quot;&gt;</span><span class="doctag">&lt;/param&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;param name=&quot;targetContext&quot;&gt;</span><span class="doctag">&lt;/param&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;returns&gt;</span><span class="doctag">&lt;/returns&gt;</span></span></span><br><span class="line">    <span class="function"><span class="built_in">bool</span> <span class="title">GoToNextViewStatus</span>(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">        GameViewStatusEnum targetStatus, </span></span></span><br><span class="line"><span class="params"><span class="function">        Func&lt;<span class="built_in">bool</span>&gt; enterCheck,</span></span></span><br><span class="line"><span class="params"><span class="function">        Action checkCallback = <span class="literal">null</span>, </span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="built_in">object</span> targetContext = <span class="literal">null</span></span>)</span>;</span><br><span class="line">        </span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 进入视图状态</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;param name=&quot;targetStatus&quot;&gt;</span>目标状态<span class="doctag">&lt;/param&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;param name=&quot;targetContext&quot;&gt;</span>目标状态需要的上下文<span class="doctag">&lt;/param&gt;</span></span></span><br><span class="line">    <span class="function"><span class="built_in">bool</span> <span class="title">GoToNextViewStatus</span>(<span class="params">GameViewStatusEnum targetStatus, <span class="built_in">object</span> targetContext</span>)</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 进入视图状态</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;param name=&quot;targetStatus&quot;&gt;</span>目标状态<span class="doctag">&lt;/param&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;param name=&quot;statusContextMap&quot;&gt;</span>上下文字典<span class="doctag">&lt;/param&gt;</span></span></span><br><span class="line">    <span class="function"><span class="built_in">bool</span> <span class="title">GoToNextViewStatus</span>(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">        GameViewStatusEnum targetStatus, </span></span></span><br><span class="line"><span class="params"><span class="function">        Map&lt;GameViewStatusEnum, <span class="built_in">object</span>&gt; statusContextMap</span>)</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 回到上一视图状态</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;param name=&quot;needReRequest&quot;&gt;</span><span class="doctag">&lt;/param&gt;</span></span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">BackPreviousViewStatus</span>()</span>;</span><br><span class="line">        </span><br><span class="line">    <span class="meta">#<span class="keyword">endregion</span></span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="视图状态附属界面additional-panel"><a href="#视图状态附属界面-Additional-Panel" class="headerlink" title="视图状态附属界面(Additional Panel)"></a>视图状态附属界面(Additional Panel)</h2><p>如果你只是想要显示一个弹窗，或者是一个对话框，或者是一个与游戏主体逻辑流程关系不大的界面，那么就不需要将其视为一个视图状态，可以当做附属界面(AdditionalPanel)简单地打开和关闭。<strong>注意，所有附属界面会在跳转到下一个状态之前自动关闭。</strong></p>
+<p>可调用的接口是</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title">GameViewAppService</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="meta">#<span class="keyword">region</span> 附属界面相关操作</span></span><br><span class="line">        </span><br><span class="line">	<span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">	<span class="comment"><span class="doctag">///</span> 打开一个附属Panel，可传入参数</span></span><br><span class="line">	<span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">	<span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;param name=&quot;uiKey&quot;&gt;</span><span class="doctag">&lt;/param&gt;</span></span></span><br><span class="line">	<span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;param name=&quot;context&quot;&gt;</span><span class="doctag">&lt;/param&gt;</span></span></span><br><span class="line">	<span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;param name=&quot;dontDestroyOnLeave&quot;&gt;</span>该参数无效，请无视<span class="doctag">&lt;/param&gt;</span></span></span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">OpenAdditionalPanelWithContext</span>(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">	    UIKey uiKey, </span></span></span><br><span class="line"><span class="params"><span class="function">	    <span class="built_in">object</span> context, </span></span></span><br><span class="line"><span class="params"><span class="function">	    <span class="built_in">bool</span> dontDestroyOnLeave = <span class="literal">true</span></span>)</span>;</span><br><span class="line">    </span><br><span class="line">	<span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">	<span class="comment"><span class="doctag">///</span> 打开一个附属Panel（不需要上下文）</span></span><br><span class="line">	<span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">	<span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;param name=&quot;uiKey&quot;&gt;</span><span class="doctag">&lt;/param&gt;</span></span></span><br><span class="line">	<span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;param name=&quot;dontDestroyOnLoad&quot;&gt;</span>该参数无效，请无视<span class="doctag">&lt;/param&gt;</span>       </span></span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">OpenAdditionalPanel</span>(<span class="params">UIKey uiKey, <span class="built_in">bool</span> dontDestroyOnLoad = <span class="literal">true</span></span>)</span>;</span><br><span class="line">    </span><br><span class="line">	<span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">	<span class="comment"><span class="doctag">///</span> 手动关闭附属Panel</span></span><br><span class="line">	<span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">	<span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;param name=&quot;uiKey&quot;&gt;</span><span class="doctag">&lt;/param&gt;</span></span></span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">CloseAdditionalPanel</span>(<span class="params">UIKey uiKey</span>)</span>;</span><br><span class="line">        </span><br><span class="line">	<span class="meta">#<span class="keyword">endregion</span></span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<hr>
+<h1 id="补充介绍"><a href="#补充介绍" class="headerlink" title="补充介绍"></a>补充介绍</h1><blockquote>
+<p>Tip:在快速开始中介绍过的概念大多不会在此重复说明。</p>
+</blockquote>
+<h2 id="操作栈和视图链"><a href="#操作栈和视图链" class="headerlink" title="操作栈和视图链"></a>操作栈和视图链</h2><p>场景管理器是以<strong>视图状态(GameViewStatus)<strong>为基本单位做视图跳转的一个模块。其中维护实时游戏场景实时状态的数据结构是</strong>操作栈</strong>和<strong>视图链</strong>。</p>
+<h3 id="操作栈"><a href="#操作栈" class="headerlink" title="操作栈"></a>操作栈</h3><p>这是一个栈结构，它用来记录场景管理器的实时操作记录。当调用<code>GameViewAppService.GoToNextStatus</code>跳转状态时，该<u>操作记录</u>会被压入操作栈中；当调用<code>GameViewAppService.BackPreviousStatus</code>后，栈顶的<u>操作记录</u>会被弹出操作栈。操作记录是以<code>GameViewStatusEnum</code>标记的，可以在Log中看到实时的变化。</p>
+<h3 id="视图链"><a href="#视图链" class="headerlink" title="视图链"></a>视图链</h3><p>这是一个List，它用来记录实时的游戏场景状态，即当前游戏内的各个视图状态是以什么样的顺序或层级展示的。视图链只和实际展示出来的视图状态有关。越靠后的视图状态，表现上越在上层。</p>
+<p>链尾的视图状态就是当前视图状态，也是<code>GameViewAppService.GetCurStatus</code>接口获得的结果。</p>
+<p>视图链一定会和当前视图状态在配置中的路径一致。</p>
+<h2 id="viewstatusinfo"><a href="#ViewStatusInfo" class="headerlink" title="ViewStatusInfo"></a>ViewStatusInfo</h2><p>ViewStatusInfo是场景管理器的核心数据模型，它描述了视图状态的所有基本要素</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">struct</span> ViewStatusInfo</span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">// 本状态要打开的视图（填入目标视图的Key）</span></span><br><span class="line">	<span class="keyword">public</span> <span class="built_in">object</span>[] ViewKeys;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 完整到达路径（参考样例，必须从App状态开始完整描述）</span></span><br><span class="line">	<span class="keyword">public</span> GameViewStatusEnum[] Path;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 返回（即调用BackPreviousStatus方法）时是否跳过该状态</span></span><br><span class="line">	<span class="keyword">public</span> <span class="built_in">bool</span> IgnoreOnBack;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 状态作用域（作用域状态必须已存在于当前实时链上才允许进入该状态）</span></span><br><span class="line">	<span class="keyword">public</span> GameViewStatusEnum BoundaryStatus;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li><p><strong>ViewKeys</strong><br>本视图状态要打开的视图(SceneKey、PageKey、UIKey、MapKey)<br>同一个视图状态内不允许同时包含不同层的视图Key.例如<code>&#123;SceneKey, PageKey&#125;</code>或<code>&#123;PageKey, UIKey&#125;</code>等。而同层的<code>&#123;UIKey, MapKey&#125;</code>是可以的。</p>
+<p>视图打开顺序和写在数组内的顺序一致，但是如果某些视图（如Map）有一些异步加载策略的话则无法保证实际顺序。</p>
+</li>
+<li><p><strong>Path</strong></p>
+<p>抵达<u>该视图状态</u>需要经过的完整路径，即必须从起点App状态开始，以<u>该视图状态</u>结束。</p>
+<p>在实际跳转状态时，场景管理器会根据路径配置一个一个状态逐步进入。参考上方的视图状态<code>GameViewStatusEnum.HeroMainView</code>（接下来省略前缀），假定玩家当前正在<code>MainScene</code>，此时跳转到<code>HeroMainView</code>的话，就会先进入<code>HeroPage</code>，再进入<code>HeroMainView</code>。</p>
+</li>
+<li><p><strong>IgnoreOnBack</strong></p>
+<p>一般情况下，调用GameViewAppService.BackPreviousStatus()时，操作栈会做一次出栈，然后视图上回到新的操作栈栈顶的位置。但是如果该参数的值为true，则会<strong>再出栈一次</strong>。简单来说就是回退两次操作。</p>
+</li>
+<li><p><strong>BoundaryStatus</strong></p>
+<p>该属性表示，在试图调用跳转接口跳转到该状态时，玩家当前必须该属性的视图状态内，默认值为顶级的App状态，即随意跳转（App是所有状态路径的起点）。跳转状态时，场景管理器会在当前的视图链中搜索与该属性匹配的状态，搜索成功则允许跳转，搜索失败则丢弃这次操作。</p>
+</li>
+</ol>
+<h2 id="入场请求enterrequest"><a href="#入场请求-EnterRequest" class="headerlink" title="入场请求(EnterRequest)"></a>入场请求(EnterRequest)</h2><p>在配置中的所有入场网络请求会在视图开启之前全部完成，即客户端收到了所有入场请求的Response。</p>
+<p>例如，用户希望跳转的视图状态A的路径上需要经过5个其它视图状态，而这5个视图状态都配置了入场请求，那么只有在这5个请求都完成以后，路径上的第一个视图才会开始打开。这是为了保证视图所需数据的完整性。</p>
+<h2 id="视图状态附属界面additional-panel"><a href="#视图状态附属界面-Additional-Panel-1" class="headerlink" title="视图状态附属界面(Additional Panel)"></a>视图状态附属界面(Additional Panel)</h2><p>附属界面是隶属于打开时所处的视图状态的，它的<strong>生命周期与隶属的视图状态一致</strong>。例如，如果我当前在HeroList英雄列表状态，我在这里打开了一个附属弹窗，然后我跳转到MainScene主场景。则HeroList状态和它的附属弹窗会一起被关闭。</p>
+<h2 id="视图状态与游戏模块编号"><a href="#视图状态与游戏模块编号" class="headerlink" title="视图状态与游戏模块编号"></a>视图状态与游戏模块编号</h2><p>目前，项目内的游戏模块编号和视图状态<code>GameViewStatusEnum</code>的映射数值是一致的。</p>
+<p>所以如果策划来问某个模块的入口编号是什么，就要到这里来看对应的视图状态枚举。</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> 视图状态枚举</span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> 编号格式为(&quot;游戏模块编号&quot; * 1000)起始的1000个编号</span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line"><span class="keyword">public</span> <span class="built_in">enum</span> GameViewStatusEnum</span><br><span class="line">&#123;</span><br><span class="line">	...</span><br><span class="line"></span><br><span class="line">    <span class="meta">#<span class="keyword">region</span> 英雄.4</span></span><br><span class="line"></span><br><span class="line">    HeroPage = <span class="number">4000</span>,</span><br><span class="line">    HeroMainView = <span class="number">4001</span>,</span><br><span class="line">    HeroDetailView = <span class="number">4002</span>,</span><br><span class="line">    HeroIncreaseStar = <span class="number">4003</span>,</span><br><span class="line">    HeroMilitaryView = <span class="number">4004</span>,</span><br><span class="line">    HeroQualification = <span class="number">4005</span>,</span><br><span class="line">    HeroReset = <span class="number">4006</span>,</span><br><span class="line"></span><br><span class="line">    <span class="meta">#<span class="keyword">endregion</span></span></span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="当你调用gotonextstatus的时候会发生什么"><a href="#当你调用GoToNextStatus的时候会发生什么？" class="headerlink" title="当你调用GoToNextStatus的时候会发生什么？"></a>当你调用GoToNextStatus的时候会发生什么？</h2><p>对于用户来说只要知道一件事，就是<strong>视图链</strong>和<strong>实际的视图展示(Panel,Map等)<strong>一定会和你在视图状态中配置的</strong>路径</strong>完全一致。在跳转之前的，与目标状态路径中有差异的状态节点会被关闭销毁，还没打开的视图会按照路径配置顺序依次打开。</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Map&lt;GameViewStatusEnum, ViewStatusInfo&gt; GameViewStatusInfoMap =</span><br><span class="line">	<span class="keyword">new</span> HashMap&lt;GameViewStatusEnum, ViewStatusInfo&gt;()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//英雄升星</span></span><br><span class="line">	[<span class="meta">GameViewStatusEnum.HeroIncreaseStar</span>] = <span class="keyword">new</span> ViewStatusInfo(</span><br><span class="line">	    <span class="keyword">new</span> <span class="built_in">object</span>[] &#123; UIKeys.HeroIncreaseStarPanel &#125;,</span><br><span class="line">	    <span class="keyword">new</span> GameViewStatusEnum[]</span><br><span class="line">	    &#123;</span><br><span class="line">	        GameViewStatusEnum.App, GameViewStatusEnum.MainScene,</span><br><span class="line">	        GameViewStatusEnum.HeroPage, GameViewStatusEnum.HeroIncreaseStar</span><br><span class="line">	    &#125;, GameViewStatusEnum.HeroPage),</span><br><span class="line">	<span class="comment">//英雄军衔</span></span><br><span class="line">    [<span class="meta">GameViewStatusEnum.HeroMilitaryView</span>] = <span class="keyword">new</span> ViewStatusInfo(</span><br><span class="line">	    <span class="keyword">new</span> <span class="built_in">object</span>[] &#123; UIKeys.HeroIncreaseMilitaryPanel &#125;,</span><br><span class="line">	    <span class="keyword">new</span> GameViewStatusEnum[]</span><br><span class="line">	    &#123;</span><br><span class="line">	        GameViewStatusEnum.App, GameViewStatusEnum.MainScene,</span><br><span class="line">	        GameViewStatusEnum.HeroPage, GameViewStatusEnum.HeroMilitaryView,</span><br><span class="line">	    &#125;, GameViewStatusEnum.HeroPage)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>例如以上配置，英雄升星和英雄军衔路径的差异只在最后一个节点。那么当用户从升星状态跳转到军衔状态时，就会把升星的视图<code>HeroIncreaseStarPanel</code>关闭，把军衔的视图<code>HeroIncreaseMilitaryPanel</code>打开。</p>
+<hr>
+<h1 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h1><ol>
+<li>只有<code>GameViewAppService</code>中的接口是开放给用户的，<strong>不允许</strong>访问和调用其它和GameView相关的领域数据和接口。</li>
+<li>不要在退出模块之前发一个<strong>非静默</strong>的网络请求！如果玩家手速快的话可能会阻塞下一个模块的入场请求。</li>
+<li>框架内Page的切换需要一定时间，如果多次快速切换可能会被框架阻塞。</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"># C#</a>
+              <a href="/tags/Frame-Design/" rel="tag"># Frame_Design</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/06/19/Transfer-position-from-world-to-Rectangle-UI/" rel="prev" title="一种在Unity中从世界坐标转UI坐标的方法">
+                  <i class="fa fa-chevron-left"></i> 一种在Unity中从世界坐标转UI坐标的方法
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/07/03/%E6%B5%8B%E8%AF%95%E6%96%87%E7%AB%A0/" rel="next" title="测试文章">
+                  测试文章 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">VirrorE</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
