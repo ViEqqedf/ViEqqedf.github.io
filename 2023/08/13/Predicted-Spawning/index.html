@@ -19,28 +19,29 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"vieqqedf.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.18.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"style":null,"show_result":false},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"fadeIn"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="世界坐标→屏幕坐标→UI坐标 12345Vector3 screenPos &#x3D; (Camera)mainCamera.WorldToScreenPoint(worldPos);if (RectTransformUtility.ScreenPointToLocalPointInRectangle(    (RectTransform)uiWindow.transform, screenPos, (C">
+    <meta name="description" content="概述Predicted Spawning 的主要功能是：在服务端发送新生成的 Ghost 信息到客户端之前，允许客户端在本地自行生成相同 GhostType 的 Ghost，并在服务端消息抵达时同步校正 Ghost 的信息。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="一种在Unity中从世界坐标转UI坐标的方法">
-<meta property="og:url" content="https://vieqqedf.github.io/2021/06/19/Transfer-position-from-world-to-Rectangle-UI/index.html">
+<meta property="og:title" content="Predicted-Spawning">
+<meta property="og:url" content="https://vieqqedf.github.io/2023/08/13/Predicted-Spawning/index.html">
 <meta property="og:site_name" content="ViE Here!">
-<meta property="og:description" content="世界坐标→屏幕坐标→UI坐标 12345Vector3 screenPos &#x3D; (Camera)mainCamera.WorldToScreenPoint(worldPos);if (RectTransformUtility.ScreenPointToLocalPointInRectangle(    (RectTransform)uiWindow.transform, screenPos, (C">
+<meta property="og:description" content="概述Predicted Spawning 的主要功能是：在服务端发送新生成的 Ghost 信息到客户端之前，允许客户端在本地自行生成相同 GhostType 的 Ghost，并在服务端消息抵达时同步校正 Ghost 的信息。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-06-19T02:21:14.000Z">
-<meta property="article:modified_time" content="2023-06-19T02:38:18.054Z">
+<meta property="article:published_time" content="2023-08-13T05:22:33.000Z">
+<meta property="article:modified_time" content="2023-08-14T02:44:02.209Z">
 <meta property="article:author" content="VirrorE">
 <meta property="article:tag" content="Unity">
+<meta property="article:tag" content="network">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://vieqqedf.github.io/2021/06/19/Transfer-position-from-world-to-Rectangle-UI/">
+<link rel="canonical" href="https://vieqqedf.github.io/2023/08/13/Predicted-Spawning/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://vieqqedf.github.io/2021/06/19/Transfer-position-from-world-to-Rectangle-UI/","path":"2021/06/19/Transfer-position-from-world-to-Rectangle-UI/","title":"一种在Unity中从世界坐标转UI坐标的方法"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://vieqqedf.github.io/2023/08/13/Predicted-Spawning/","path":"2023/08/13/Predicted-Spawning/","title":"Predicted-Spawning"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>一种在Unity中从世界坐标转UI坐标的方法 | ViE Here!</title>
+<title>Predicted-Spawning | ViE Here!</title>
   
 
 
@@ -100,7 +101,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -113,6 +114,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">实现方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%86%85%E9%83%A8%E6%B5%81%E7%A8%8B"><span class="nav-number">3.</span> <span class="nav-text">内部流程</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -173,7 +175,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://vieqqedf.github.io/2021/06/19/Transfer-position-from-world-to-Rectangle-UI/">
+    <link itemprop="mainEntityOfPage" href="https://vieqqedf.github.io/2023/08/13/Predicted-Spawning/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/VirrorE.jpg">
@@ -186,12 +188,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="一种在Unity中从世界坐标转UI坐标的方法 | ViE Here!">
+      <meta itemprop="name" content="Predicted-Spawning | ViE Here!">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          一种在Unity中从世界坐标转UI坐标的方法
+          Predicted-Spawning
         </h1>
 
         <div class="post-meta-container">
@@ -202,14 +204,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2021-06-19 10:21:14" itemprop="dateCreated datePublished" datetime="2021-06-19T10:21:14+08:00">2021-06-19</time>
+      <time title="创建时间：2023-08-13 13:22:33" itemprop="dateCreated datePublished" datetime="2023-08-13T13:22:33+08:00">2023-08-13</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-06-19 10:38:18" itemprop="dateModified" datetime="2023-06-19T10:38:18+08:00">2023-06-19</time>
+      <time title="修改时间：2023-08-14 10:44:02" itemprop="dateModified" datetime="2023-08-14T10:44:02+08:00">2023-08-14</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -230,8 +232,45 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>世界坐标→屏幕坐标→UI坐标</p>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Vector3 screenPos = (Camera)mainCamera.WorldToScreenPoint(worldPos);</span><br><span class="line"><span class="keyword">if</span> (RectTransformUtility.ScreenPointToLocalPointInRectangle(</span><br><span class="line">    (RectTransform)uiWindow.transform, screenPos, (Camera)uiCamera, <span class="keyword">out</span> Vector2 localPoint)) &#123;</span><br><span class="line">    transform.localPosition = localPoint + extraOffset + verticalOffset;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    <div class="post-body" itemprop="articleBody"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>Predicted Spawning 的主要功能是：在服务端发送新生成的 Ghost 信息到客户端之前，允许客户端在本地自行生成相同 GhostType 的 Ghost，并在服务端消息抵达时同步校正 Ghost 的信息。</p>
+<span id="more"></span>
+
+<h1 id="实现方法"><a href="#实现方法" class="headerlink" title="实现方法"></a>实现方法</h1><ol>
+<li>对于需要预测生成的 Ghost，其 GhostMode 需要设置为 <code>GhostMode.Predicted</code> 或 <code>GhostMode.OwnerPredicted</code>。或是将其 Entity 上的 Ghost Authoring Component 组件中的 Supported Ghost Modes 设置为 Predicted</li>
+<li>由于客户端需要提前进行预测生成，所以需要创建一个在 PredictedSimulationSystemGroup 中 Update 的 System，并在其中实例化需要 Predicted Spawning 的 Entity<ol>
+<li>该 System 需要同时在客户端和服务端 Update</li>
+<li>由于大多数时候对一个实体只需要进行一次 Predicted Spawning，所以在该System中实例化 Entity之前可先判断<code>NetworkTime.IsFirstTimeFullyPredictingTick</code>，若为 <code>false</code> 则跳过多余的预测</li>
+</ol>
+</li>
+<li>接收到来自服务端的 Ghost 信息后，客户端将由 DefaultGhostSpawnClassificationSystem 分拣出与之匹配的该客户端预测生成的 Ghost，默认的匹配方式是相同的 GhostType 和 5 次以内的 Spawning Tick 差值。但是根据需要，该分拣过程是可以被重写的。例如，当前有 10 个已经生成的投射物，当服务端返回信息时，每个 Ghost 都要正确地匹配上客户端对应预测生成的投射物，此时就需要重写 ClassificationSystem 的行为。具体的实现方法可参考 <a target="_blank" rel="noopener" href="https://docs.unity3d.com/Packages/com.unity.netcode@1.0/manual/ghost-spawning.html">Spawning Ghost Entities</a><ol>
+<li><p>核心目的是将客户端中匹配的 <code>PredictedGhostSpawn.entity</code> 赋给接收到的新 Ghost 的 <code>PredictedSpawnEntity</code> 字段，并将原本保存在 Buffer 中的 PredictedGhostSpawn 移除：</p>
+   <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">newGhostSpawn.PredictedSpawnEntity = predictedSpawnList[j].entity;</span><br><span class="line">predictedSpawnList[j] = predictedSpawnList[predictedSpawnList.Length - 1];</span><br><span class="line">predictedSpawnList.RemoveAt(predictedSpawnList.Length - 1);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>手册的示例中创建的 Job 有两个参数：<code>DynamicBuffer&lt;GhostSpawnBuffer&gt; ghosts</code> 和 <code>DynamicBuffer&lt;SnapshotDataBuffer&gt; data</code>，由于需要遍历当前客户端收到的所有 Ghost 信息，所以 <code>ghosts</code> 参数是必需的。而如果需要通过查找快照历史来做一些更详细的匹配（例如上方例子的需求），就可以从 <code>data</code> 参数中获得相关信息</p>
+</li>
+</ol>
+</li>
+</ol>
+<h1 id="内部流程"><a href="#内部流程" class="headerlink" title="内部流程"></a>内部流程</h1><ol>
+<li>对于一个希望被预测生成的 Ghost，其 Ghost Entity 会被自动添加 PredictedGhostSpawnRequest 组件。<ol>
+<li>除了在实现方法中的两种方式以外，还可以使用 <code>GhostPrefabCreation.ConverToGhostPrefab</code> 方法，并将 <code>GhostPrefabCreation.Config.SupportedGhostModes</code> 设置为 <code>GhostModeMask.Predicted</code> 来为其添加 PredictedGhostSpawnRequest</li>
+</ol>
+</li>
+<li>在 PredictedGhostSpawnSystem 中，InitGhostJob 会先遍历所有的 PredictedGhostSpawnRequest 并生成和初始化 Ghost，该过程结束后对应的 PredictedGhostSpawnRequest 会被移除，然后 CleanupPredictedSpawn 会遍历已经预测生成的 Ghost，销毁掉其中过时的 Ghost<ol>
+<li>InitGhostJob 通过 EntityTypeHandle 以 Chunk 为单位遍历所有 Entity<ol>
+<li>初始化 Ghost 时，会填入一个无效的 Ghost Id，填入的 GhostType 是 GhostCollectionPrefab 的索引，其值通过遍历 <code>Dynamic&lt;GhostCollectionPrefab&gt;</code> 并与 Chunk 中实体的 GhostType 进行比较获取，填入的 SpawnTick 是上一次客户端实例化了一个包含 PredictedGhostSpawnRequest 组件时的 ServerTick。</li>
+<li>初始化完成的 Ghost 将被添加到  <code>DynamicBuffer&lt;PredictedGhostSpawn&gt;</code> 中</li>
+<li>InitGhostJob 不支持可开关的组件类型(enableable component types)，尚不理解其含义</li>
+</ol>
+</li>
+<li>CleanupPredictedSpawn 的销毁依据是：Ghost 的 SpawnTick 比当前 Interpolation Tick 还要老</li>
+</ol>
+</li>
+<li>在客户端接收到来自服务端的 Ghost 信息后（也就是 GhostReceiveSystem Update 结束后），客户端将由 GhostSpawnClassificationSystem 遍历 <code>DynamicBuffer&lt;PredictedGhostSpawn&gt;</code>，从中筛选出 GhostOwner 为本地客户端且类型为 Predicted 的 Ghost，将这些 Ghost 的 SpawnType 设置为 <code>GhostSpawnBuffer.Type.Predicted</code>。然后由 DefaultGhostSpawnClassificationSystem 或自定义的 Classification System 来做最终的分拣<ol>
+<li>新接收到的 Ghost 在尚未被分拣时会先被分配一个临时的 SpawnType，其值由 <code>GhostPrefabBlobMetaData.DefaultMode</code> 决定，在 ConvertToGhostPrefab 时会将 Ghost 的 SupportedGhostModes 写入 DefaultMode 中</li>
+</ol>
+</li>
+</ol>
 
     </div>
 
@@ -242,20 +281,18 @@
     <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/Unity/" rel="tag"># Unity</a>
+              <a href="/tags/network/" rel="tag"># network</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2021/05/11/%E5%85%B3%E4%BA%8Etex2D/" rel="prev" title="关于tex2D">
-                  <i class="fa fa-angle-left"></i> 关于tex2D
+                <a href="/2023/06/19/Any-solution-when-packet-loss-happened-in-game-network-sync/" rel="prev" title="关于游戏网络同步中的UDP连接丢包问题">
+                  <i class="fa fa-angle-left"></i> 关于游戏网络同步中的UDP连接丢包问题
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2021/10/17/Scene-Manager-Instruction/" rel="next" title="场景管理器说明书">
-                  场景管理器说明书 <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
