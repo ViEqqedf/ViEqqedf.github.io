@@ -27,7 +27,7 @@
 <meta property="og:description" content="概述Predicted Spawning 的主要功能是：在服务端发送新生成的 Ghost 信息到客户端之前，允许客户端在本地自行生成相同 GhostType 的 Ghost，并在服务端消息抵达时同步校正 Ghost 的信息。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-08-13T05:22:33.000Z">
-<meta property="article:modified_time" content="2023-08-14T02:44:02.209Z">
+<meta property="article:modified_time" content="2024-08-05T02:50:50.860Z">
 <meta property="article:author" content="VirrorE">
 <meta property="article:tag" content="Unity">
 <meta property="article:tag" content="network">
@@ -114,7 +114,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">实现方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%86%85%E9%83%A8%E6%B5%81%E7%A8%8B"><span class="nav-number">3.</span> <span class="nav-text">内部流程</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">实现方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B"><span class="nav-number">3.</span> <span class="nav-text">示例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#unity-%E4%B8%AD%E7%9A%84%E9%A2%84%E7%94%9F%E6%88%90%E7%89%B9%E6%80%A7%E7%A4%BA%E4%BE%8B"><span class="nav-number">3.1.</span> <span class="nav-text">Unity 中的预生成特性示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E5%AE%B9"><span class="nav-number">3.1.1.</span> <span class="nav-text">内容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%84%E6%9C%9F"><span class="nav-number">3.1.2.</span> <span class="nav-text">预期</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%84%E6%B5%8B%E5%A4%B1%E8%B4%A5%E7%A4%BA%E4%BE%8B"><span class="nav-number">3.2.</span> <span class="nav-text">预测失败示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E5%AE%B9"><span class="nav-number">3.2.1.</span> <span class="nav-text">内容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%84%E6%9C%9F"><span class="nav-number">3.2.2.</span> <span class="nav-text">预期</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%86%85%E9%83%A8%E6%B5%81%E7%A8%8B"><span class="nav-number">4.</span> <span class="nav-text">内部流程</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -211,7 +211,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-08-14 10:44:02" itemprop="dateModified" datetime="2023-08-14T10:44:02+08:00">2023-08-14</time>
+      <time title="修改时间：2024-08-05 10:50:50" itemprop="dateModified" datetime="2024-08-05T10:50:50+08:00">2024-08-05</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -251,6 +251,15 @@
 </ol>
 </li>
 </ol>
+<h1 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h1><h2 id="unity-中的预生成特性示例"><a href="#Unity-中的预生成特性示例" class="headerlink" title="Unity 中的预生成特性示例"></a>Unity 中的预生成特性示例</h2><h3 id="内容"><a href="#内容" class="headerlink" title="内容"></a>内容</h3><p>客户端中的玩家点击一次发射按钮，同时发射两个投射物：</p>
+<ol>
+<li>投射物 A 使用 Predicted Spawing 特性在客户端立刻生成，并在客户端上与其它碰撞体发生交互。直到服务端发送了包含该投射物信息的快照后，相应信息将赋给对应的预测生成的投射物进行校正。</li>
+<li>投射物 B 不进行预测生成，将发射指令上发到服务端后，等待服务端返回投射物信息后才生成投射物</li>
+</ol>
+<p>对于投射物 A，在来自服务端的投射物信息抵达时，将客户端预测生成的投射物信息与服务端下发的进行对比并输出</p>
+<h3 id="预期"><a href="#预期" class="headerlink" title="预期"></a>预期</h3><p>通过调整当前的 NetworkTickRate 模拟延迟，预期在 NetworkTickRate 较低时，投射物 A 的生成表现依然平滑，投射物 B 会出现明显的延迟生成</p>
+<h2 id="预测失败示例"><a href="#预测失败示例" class="headerlink" title="预测失败示例"></a>预测失败示例</h2><h3 id="内容"><a href="#内容-1" class="headerlink" title="内容"></a>内容</h3><p>客户端中的玩家点击一次发射按钮，发射一个投射物。该投射物在客户端进行预测生成，但在服务端手动拦截它的生成</p>
+<h3 id="预期"><a href="#预期-1" class="headerlink" title="预期"></a>预期</h3><p>由于服务端没有及时下发实际的 Ghost 信息，客户端预测生成的 Ghost 触发过时销毁机制，对应的 Entity 也将被销毁</p>
 <h1 id="内部流程"><a href="#内部流程" class="headerlink" title="内部流程"></a>内部流程</h1><ol>
 <li>对于一个希望被预测生成的 Ghost，其 Ghost Entity 会被自动添加 PredictedGhostSpawnRequest 组件。<ol>
 <li>除了在实现方法中的两种方式以外，还可以使用 <code>GhostPrefabCreation.ConverToGhostPrefab</code> 方法，并将 <code>GhostPrefabCreation.Config.SupportedGhostModes</code> 设置为 <code>GhostModeMask.Predicted</code> 来为其添加 PredictedGhostSpawnRequest</li>
