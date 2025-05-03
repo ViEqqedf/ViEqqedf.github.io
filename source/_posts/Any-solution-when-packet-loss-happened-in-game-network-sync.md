@@ -3,7 +3,7 @@ title: 关于游戏网络同步中的UDP连接丢包问题
 date: 2023-06-19 16:05:18
 tags:
 - network
-- game dev
+- GameDev
 categories:
 - Tech
 ---
