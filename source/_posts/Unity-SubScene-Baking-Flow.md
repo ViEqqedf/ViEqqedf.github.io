@@ -28,15 +28,13 @@ Unity Baking Scene 的主要流程如下：
 
    1. 获得所有 [WorldSystemFilter(WorldSystemFilterFlags.BakingSystem)] 的系统
 
-   2. 依序
-
-      创建各个 BakingSystemGroup
+   2. 依序创建各个 BakingSystemGroup
 
       1. BakingSystemGroup
-      2. PostBakingSystemGroup
+   2. PostBakingSystemGroup
       3. PreBakingSystemGroup
       4. TransformBakingSystemGroup
-
+      
    3. 将 WorldSystemFilterFlags.BakingSystem 中找到的系统创建到其 UpdateInGroup 特性对应的 group 内，并排序
 
    4. 执行 PreBakingSystemGroup.Update
