@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.1.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/VirrorE.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/VirrorE.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/VirrorE.jpg">
+  <link rel="mask-icon" href="/images/VirrorE.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"vieqqedf.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12,"onmobile":false},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null,"show_result":false},"fold":{"enable":false,"height":500},"language":false,"highlight_theme":"normal"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"fadeIn"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="关于tex2D的数据结构和一些工作方式 纹理(Textures)储存数值数据，每个通道的值范围一般在0.0到1.0之间（例如rgba）。不同的纹理各自有不同的最大&#x2F;最小值范围，不同的精度级别，和不同的伽马曲线，但着色器从tex2D()得到的值形式总是一个包含四个分量的浮点向量。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于tex2D">
+<meta property="og:url" content="https://vieqqedf.github.io/2021/05/11/%E5%85%B3%E4%BA%8Etex2D/index.html">
+<meta property="og:site_name" content="ViE Here!">
+<meta property="og:description" content="关于tex2D的数据结构和一些工作方式 纹理(Textures)储存数值数据，每个通道的值范围一般在0.0到1.0之间（例如rgba）。不同的纹理各自有不同的最大&#x2F;最小值范围，不同的精度级别，和不同的伽马曲线，但着色器从tex2D()得到的值形式总是一个包含四个分量的浮点向量。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-05-11T09:47:46.000Z">
+<meta property="article:modified_time" content="2026-06-04T12:44:08.135Z">
+<meta property="article:author" content="VirrorE">
+<meta property="article:tag" content="Rendering">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://vieqqedf.github.io/2021/05/11/%E5%85%B3%E4%BA%8Etex2D/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://vieqqedf.github.io/2021/05/11/%E5%85%B3%E4%BA%8Etex2D/","path":"2021/05/11/关于tex2D/","title":"关于tex2D"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>关于tex2D | ViE Here!</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">ViE Here!</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">难道你想看到“宁静致远”之类的东西吗（笑</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="VirrorE"
+      src="/images/VirrorE.jpg">
+  <p class="site-author-name" itemprop="name">VirrorE</p>
+  <div class="site-description" itemprop="description">sore ga boku no cainou?</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ViEqqedf" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ViEqqedf" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:vieqqedf@gmail.com" title="E-Mail → mailto:vieqqedf@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://vieqqedf.github.io/2021/05/11/%E5%85%B3%E4%BA%8Etex2D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/VirrorE.jpg">
+      <meta itemprop="name" content="VirrorE">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ViE Here!">
+      <meta itemprop="description" content="sore ga boku no cainou?">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="关于tex2D | ViE Here!">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          关于tex2D
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-05-11 17:47:46" itemprop="dateCreated datePublished" datetime="2021-05-11T17:47:46+08:00">2021-05-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-06-04 20:44:08" itemprop="dateModified" datetime="2026-06-04T20:44:08+08:00">2026-06-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Tech/" itemprop="url" rel="index"><span itemprop="name">Tech</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>关于tex2D的数据结构和一些工作方式</p>
+<p>纹理(Textures)储存数值数据，每个通道的值范围一般在0.0到1.0之间（例如<code>rgba</code>）。不同的纹理各自有不同的最大&#x2F;最小值范围，不同的精度级别，和不同的伽马曲线，<strong>但着色器从<code>tex2D()</code>得到的值形式总是一个包含四个分量的浮点向量</strong>。<span id="more"></span>四个分量分别映射到纹理的四个通道，可以独立地访问，也可以以<code>.rgba</code>或<code>.xyzw</code>的形式在HLSL中访问。所以<code>.x</code>，<code>.r</code>，甚至像<code>.ag</code>或<code>.zxx</code>这样的混用都是有效的。但是<code>.xg</code>是不允许的，在指定使用的分量时不允许同时使用<code>xyzw</code>和<code>rgba</code>。<code>valueA.x = valueB.r</code>是允许的。</p>
+<p>但是不是所有的纹理都包含所有4个有效的分量，有些只有RGB，或RG，或R，或者只有A。<strong>而<code>tex2D()</code>总是返回一个<code>float4</code>的结构</strong>，没有保存的通道信息则取决于纹理格式返回一个0.0到1.0之间的值。大多数情况下通道值会返回0.0，但是有一些RGB纹理格式的A通道会返回1.0。</p>
+<p>关于不同类型之间的赋值，如果将一个<code>float4</code>类型的右值赋予一个<code>float</code>类型的左值，只有第一个分量会被用到。所以，以下赋值的效果是完全一致的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">float result = float4(1, 2, 3, 4);</span><br><span class="line">float result = float4(1, 2, 3, 4).x;</span><br><span class="line">float result = float4(1, 2, 3, 4).r;</span><br><span class="line">float result = 1;</span><br></pre></td></tr></table></figure>
+
+<p>此外，如果你习惯于以字节表示法看到颜色值，例如：从0到255的整数值。这是每个通道颜色的8位存储的文字表示，但不是它们被读取的方式。对于着色器来说，颜色值被视为一个范围为0.0到1.0，精度为1.0&#x2F;255.0的浮点数。然后是sRGB，在着色器取色之前，它可能应用额外的0.0到1.0范围的伽马曲线。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Rendering/" rel="tag"># Rendering</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/05/10/%E8%B4%B4%E5%9B%BE%E5%88%B6%E4%BD%9C%E5%BB%BA%E8%AE%AE/" rel="prev" title="贴图制作建议">
+                  <i class="fa fa-angle-left"></i> 贴图制作建议
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/06/19/Transfer-position-from-world-to-Rectangle-UI/" rel="next" title="一种在Unity中从世界坐标转UI坐标的方法">
+                  一种在Unity中从世界坐标转UI坐标的方法 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">VirrorE</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

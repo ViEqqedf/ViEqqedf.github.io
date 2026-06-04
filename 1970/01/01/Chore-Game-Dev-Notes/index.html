@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.1.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/VirrorE.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/VirrorE.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/VirrorE.jpg">
+  <link rel="mask-icon" href="/images/VirrorE.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"vieqqedf.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12,"onmobile":false},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null,"show_result":false},"fold":{"enable":false,"height":500},"language":false,"highlight_theme":"normal"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"fadeIn"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="这里主要用来存放值得记录但不成体系或规模的开发笔记。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="开发过程中的杂项笔记">
+<meta property="og:url" content="https://vieqqedf.github.io/1970/01/01/Chore-Game-Dev-Notes/index.html">
+<meta property="og:site_name" content="ViE Here!">
+<meta property="og:description" content="这里主要用来存放值得记录但不成体系或规模的开发笔记。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="1969-12-31T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-05-05T18:25:55.865Z">
+<meta property="article:author" content="VirrorE">
+<meta property="article:tag" content="Fragment">
+<meta property="article:tag" content="GameDev">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://vieqqedf.github.io/1970/01/01/Chore-Game-Dev-Notes/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://vieqqedf.github.io/1970/01/01/Chore-Game-Dev-Notes/","path":"1970/01/01/Chore-Game-Dev-Notes/","title":"开发过程中的杂项笔记"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>开发过程中的杂项笔记 | ViE Here!</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">ViE Here!</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">难道你想看到“宁静致远”之类的东西吗（笑</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">基于状态同步的技能框架</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">物理模块</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">3.</span> <span class="nav-text">行为树</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">4.</span> <span class="nav-text">遮挡剔除</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">5.</span> <span class="nav-text">角色属性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">6.</span> <span class="nav-text">空间划分</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">7.</span> <span class="nav-text">TODO</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="VirrorE"
+      src="/images/VirrorE.jpg">
+  <p class="site-author-name" itemprop="name">VirrorE</p>
+  <div class="site-description" itemprop="description">sore ga boku no cainou?</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ViEqqedf" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ViEqqedf" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:vieqqedf@gmail.com" title="E-Mail → mailto:vieqqedf@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://vieqqedf.github.io/1970/01/01/Chore-Game-Dev-Notes/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/VirrorE.jpg">
+      <meta itemprop="name" content="VirrorE">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ViE Here!">
+      <meta itemprop="description" content="sore ga boku no cainou?">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="开发过程中的杂项笔记 | ViE Here!">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          开发过程中的杂项笔记
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：1970-01-01 00:00:00" itemprop="dateCreated datePublished" datetime="1970-01-01T00:00:00+08:00">1970-01-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-05-06 02:25:55" itemprop="dateModified" datetime="2025-05-06T02:25:55+08:00">2025-05-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Tech/" itemprop="url" rel="index"><span itemprop="name">Tech</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>这里主要用来存放值得记录但不成体系或规模的开发笔记。</p>
+<span id="more"></span>
+
+
+
+<h1><span id="基于状态同步的技能框架">基于状态同步的技能框架</span></h1><ol>
+<li><p>状态同步</p>
+<ol>
+<li>为什么是状态同步？<ol>
+<li>对网络波动的容忍度高</li>
+<li>mmorpg 对实时性的要求不算高</li>
+<li>项目的单位数量并不多</li>
+<li>断线重连处理相对容易</li>
+<li>客户端逻辑性能压力较小</li>
+</ol>
+</li>
+<li>相应的问题是<ol>
+<li>回放不好做</li>
+<li>输入反馈会存在网络延迟</li>
+<li>客服随机数的不一致问题</li>
+</ol>
+</li>
+<li>各个问题是怎么处理的？<ol>
+<li>周期性的全量状态快照 + 全事件记录，期间的重播走插值</li>
+<li>使用预测和预演降低观感上的延迟<ol>
+<li>在移动上，使用预测，客户端向服务端发送带指令帧号的输入，服务端下发时附带指令帧号，客户端自行回滚计算。同时服务端在没有接受到新的客户端指令时会保留上一个指令继续执行，直到有新指令或明确的停止指令</li>
+<li>在技能上，直接预演本地玩家技能的表现，如动画和相关特效</li>
+<li>在投射物上，使用预生成，运动模拟是依靠模板执行的。在服务端同步下来以后挂载到客户端预生成的投射物上</li>
+</ol>
+</li>
+<li>客服使用相同的随机种子</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p>接口</p>
+</li>
+<li><p>事件</p>
+</li>
+<li><p>带编辑器的工作流</p>
+</li>
+</ol>
+<h1><span id="物理模块">物理模块</span></h1><ol>
+<li>为什么要自己实现？<ol>
+<li>项目的主逻辑是不依赖 unity 组件的框架</li>
+<li>可用的第三方库各有问题或缺点</li>
+<li>太重，不需要那么多的特性</li>
+<li>部分规则需要定制</li>
+</ol>
+</li>
+<li>实现方式<ol>
+<li><p>基本流程</p>
+<ol>
+<li>粗检测 → 窄检测 → 应用加速度 → 解约束 → 应用速度 → 回调</li>
+</ol>
+</li>
+<li><p>粗检测</p>
+<ol>
+<li>【TODO】简单的网格法空间划分</li>
+<li>Sweep And Prune</li>
+</ol>
+</li>
+<li><p>窄检测使用算法</p>
+<ol>
+<li>GJK + EPA<ol>
+<li>不使用 SAT 是因为<ol>
+<li>SAT 的原理：将两个多边形的顶点投影在多边形每条边上，获得投影点的集合后做 SAP</li>
+<li>其原理导致多边形碰撞体的计算效率相对较低，边数较少时则相差不大</li>
+<li>想要准确的碰撞点</li>
+<li>SAT 需要单独处理部分图形（圆等）反而不是问题，实际上部分简单图形对会特地拿出来处理以减少计算量</li>
+</ol>
+</li>
+<li>基于闵可夫斯基差和单纯形的算法原理<ol>
+<li>定义一个 support 函数，沿着迭代方向找到两个碰撞形上距离最远的两个点，将两个点相减，获得单纯形上的一个点</li>
+<li>随机选一个初始方向，用 support 函数得到第一个 support 点</li>
+<li>将初始方向取反，作为下一次的迭代方向</li>
+<li>GJK 迭代循环：<ol>
+<li>用 support 函数获得一个新的 support 点</li>
+<li>若新的 support 点在迭代方向上的点积小于等于零，说明该方向上已经找不到一个可以跨越原点的 support 点了，即不存在一个单纯形能包含原点。两个多边形不相交，退出迭代</li>
+<li>若 support 点达到三个，这三个点组成的单纯形若包含原点，说明出现了碰撞</li>
+<li>否则仅保留离原点最近的 support 边上的两个点</li>
+<li>计算这两个点构成的直线的垂线，垂线取朝向原点的方向作为下一次的迭代方向</li>
+<li>循环</li>
+</ol>
+</li>
+<li>EPA<ol>
+<li><p>目标：获得原点到最近的<strong>闵可夫斯基差集多边形</strong>边的垂线向量，即为穿透向量</p>
+</li>
+<li><p>找到单纯形上离原点最近的边，向外做垂线作为迭代方向扩展单纯形，直到无法扩展为止，最终向量就是穿透向量</p>
+</li>
+<li><p>求碰撞点对</p>
+<ol>
+<li><p>记录支撑点的原始点<br>每次调用支撑函数时，保存原始形状中的点：</p>
+<p>s&#x3D;a−b 其中 a∈A, b∈B</p>
+</li>
+<li><p>插值计算碰撞点<br>假设 EPA 找到的最近边由支撑点 s1&#x3D; a1 − b1​ 和 s2 &#x3D; a2 − b2 组成，且原点在该边上的投影为：</p>
+<p>p &#x3D; λs1 + (1−λ) s2 (λ∈[0,1])</p>
+<p>对应的原始碰撞点为：</p>
+<p>a &#x3D; λa1 + (1−λ)a2, b &#x3D; λb1 + (1−λ)b2</p>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p>约束处理</p>
+<ol>
+<li>积分物体速度</li>
+<li>生成碰撞点对、碰撞法线与碰撞深度</li>
+<li>解算物体接触速度约束</li>
+<li>积分物体位置</li>
+<li>解算物体接触位置约束</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<h1><span id="行为树">行为树</span></h1><h1><span id="遮挡剔除">遮挡剔除</span></h1><ol>
+<li>空间划分 + Raycast</li>
+<li>PVS</li>
+<li>SOC</li>
+</ol>
+<h1><span id="角色属性">角色属性</span></h1><ol>
+<li><p>cur &amp; next 概念</p>
+<ol>
+<li>保持帧稳定</li>
+<li>规范接口，方便建立统一规则</li>
+</ol>
+</li>
+<li><p>角色状态</p>
+<ol>
+<li>引用计数机制</li>
+<li>客户端额外维护一份本地角色状态，只针对自己施加给自己的状态，用来提供及时反馈</li>
+</ol>
+</li>
+</ol>
+<h1><span id="空间划分">空间划分</span></h1><ul>
+<li>网格 (O(1))<ul>
+<li>插入、更新都很快</li>
+<li>对于跨越多个网格的物体占用的空间更大</li>
+</ul>
+</li>
+<li>四叉树 (Insert: O(logN), Query: O(n))<ul>
+<li>动态更新？找到旧位置的节点，移除离开的物体，并考虑这个子树是否需要删除，然后将物体插入树上的新位置</li>
+<li>对于在边界上反复横跳的物体会导致频繁更新</li>
+</ul>
+</li>
+<li>松散四叉树<ul>
+<li>解决反复横跳问题。定义了宽松的出口边界，经验上出口边界的长度是入口边界的 2 倍最好</li>
+<li>刚好 2 倍时，会使得一个**“AABB 小于入口边界长度”**的碰撞体的位置在入口范围内时，其 AABB 一定不会超出出口边界。可以以此规划入口边界大小</li>
+<li>一种组合用法：网格法 + 松散四叉树，降低查找时间复杂度到 O(1)</li>
+</ul>
+</li>
+<li>八叉树 (Insert: O(logN), Query: O(n))</li>
+<li>BVH 树</li>
+</ul>
+<h1><span id="todo">TODO</span></h1><ul>
+<li>图形学复习                                                                                                                                                                                                                                                                                                                                       </li>
+<li>行为树复习</li>
+<li>3C 看一下</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/GameDev/" rel="tag"># GameDev</a>
+              <a href="/tags/Fragment/" rel="tag"># Fragment</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/08/31/Unity%E5%8A%A8%E7%94%BB%E5%B1%9E%E6%80%A7/" rel="next" title="Unity动画属性">
+                  Unity动画属性 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">VirrorE</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
